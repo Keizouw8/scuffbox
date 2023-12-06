@@ -14,4 +14,4 @@ app.use(router);
 
 io.on("connection", connectionHandler);
 
-app.listen(8888, console.log("Listening on port 8888"));
+server.listen(8888, console.log("Listening on port 8888"));
