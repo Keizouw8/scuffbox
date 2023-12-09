@@ -10,10 +10,10 @@ import index from "./index.js";
 const router = Router();
 
 router.use("/static", express.static("./static"));
-router.use(helmet());
+// router.use(helmet());
 router.use(cors());
-router.use(csp);
-router.use(setNonce);
+// router.use(csp);
+// router.use(setNonce);
 
 router.get("/", index);
 
