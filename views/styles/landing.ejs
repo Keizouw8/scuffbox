@@ -1,0 +1,89 @@
+<style nonce="<%= locals.nonce %>">
+    @font-face {
+        font-family: "din";
+        src: url("/static/fonts/dincondensedbold.ttf");
+    }
+    
+    body{
+        background: rgb(230, 120, 170);
+    }
+
+    accent{
+        background: rgb(240, 220, 240);
+        position: absolute;
+        top: 10vh;
+        left: 0;
+        height: 30vh;
+        width: 100vw;
+    }
+
+    content{
+        position: absolute;
+        top: 17vh;
+        right: 5vw;
+        height: 66vh;
+        width: 40vw;
+        background-image: url(/static/avatars/1.jpg);
+        background-position: center;
+        background-size: cover;
+    }
+
+    menu {
+        position: absolute;
+        width: 45vw;
+        left: 5vw;
+        top: 50%;
+        transform: translateY(-50%);
+    }
+
+    menu img{
+        position: relative;
+        display: block;
+        width: 100%;
+    }
+
+    menu options {
+        position: relative;
+        top: 2vw;
+        left: 8vw;
+    }
+
+    menu options p {
+        cursor: pointer;
+        user-select: none;
+        position: relative;
+        display: block;
+        font-family: "din";
+        font-size: 4.5vw;
+        color: black;
+        left: 0;
+        transition: 0.1s;
+    }
+
+    menu options p[selected="1"] {
+        color: white;
+        left: -3vw;
+    }
+
+    menu options p span.material-symbols-outlined {
+        position: absolute;
+        left: -1.5vw;
+        top: 38%;
+        transform: translate(-100%, -50%);
+        background: black;
+        border-radius: 0.1vw;
+        color: white;
+        aspect-ratio: 1;
+        box-shadow: 0 0 0.5vw 0 white;
+        width: 4vw;
+        line-height: 4vw;
+        text-align: center;
+        font-size: 3vw;
+        font-weight: 900;
+        opacity: 0;
+    }
+
+    menu options p[selected="1"] span.material-symbols-outlined {
+        opacity: 1;
+    }
+</style>

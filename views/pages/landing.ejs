@@ -1,30 +1,14 @@
 <%- include("../partials/head") %>
-	<h1>landing</h1>
-	<character style="height: 500px">
-		<origin>
-			<torso>
-				<background></background>
-				<waistbg></waistbg>
-				<face></face>
-				<bicep>
-					<fore></fore>
-				</bicep>
-				<bicep>
-					<fore></fore>
-				</bicep>
-			</torso>
-			<waist>
-				<background></background>
-				<thigh>
-					<shin></shin>
-				</thigh>
-				<thigh>
-					<shin></shin>
-				</thigh>
-			</waist>
-		</origin>
-	</character>
+	<accent></accent>
+	<content></content>
+	<menu>
+		<img src="/static/logos/scuffbox.png">
+		<options>
+			<p selected="1" id="gfp">GOOD FEELING POLITICS<span class="material-symbols-outlined">keyboard_return</span></p>
+			<p selected="0" id="settings">SETTINGS<span class="material-symbols-outlined">keyboard_return</span></p>
+			<p selected="0" id="howto">HOW TO<span class="material-symbols-outlined">keyboard_return</span></p>
+		</options>
+	</menu>
 	<%- include("../scripts/landing") %>
-	<%- include("../scripts/character") %>
-	<%- include("../styles/character") %>
+	<%- include("../styles/landing") %>
 <%- include("../partials/feet") %>

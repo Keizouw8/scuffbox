@@ -1,0 +1,27 @@
+<%- include("../partials/head") %>
+	<character style="height: 1000px">
+		<origin>
+			<waist>
+				<thigh class="left">
+					<shin></shin>
+				</thigh>
+				<thigh class="right">
+					<shin></shin>
+				</thigh>
+			</waist>
+			<torso>
+				<background></background>
+				<face></face>
+				<bicep class="left">
+					<fore></fore>
+				</bicep>
+				<bicep class="right">
+					<fore></fore>
+				</bicep>
+			</torso>
+		</origin>
+	</character>
+	<img style="position: absolute; width: 390px; left: 55px; top: 100px; opacity: 0.5;" src="/static/mii.png">
+	<%- include("../scripts/character") %>
+	<%- include("../styles/character") %>
+<%- include("../partials/feet") %>

@@ -1,0 +1,22 @@
+<svg width="162" height="201" xmlns="http://www.w3.org/2000/svg">
+    <mask id="cheek">
+        <rect fill="white" height="201" width="162" y="0" x="0"/>
+        <rect fill="black" height="75" width="162" y="0" x="0"/>
+    </mask>
+    <mask id="chin">
+        <rect fill="black" height="201" width="162" y="0" x="0"/>
+        <rect fill="white" height="13" width="20" y="188" x="71"/>
+    </mask>
+    <mask id="top">
+        <rect fill="black" height="201" width="162" y="0" x="0"/>
+        <rect fill="white" height="26" width="162" y="0" x="0"/>
+    </mask>
+    <mask id="middle">
+        <rect fill="black" height="201" width="162" y="0" x="0"/>
+        <rect fill="white" height="49" width="162" y="26" x="0"/>
+    </mask>
+    <ellipse mask="url(#cheek)" fill="black" cx="81" cy="50" rx="82" ry="150"/>
+    <path mask="url(#chin)" fill="black" d="m18.76,188l62.24,13l62.24,-13l-124.48,0z"/>
+    <ellipse mask="url(#top)" fill="black" cx="81" cy="68" rx="81" ry="68"/>
+    <ellipse mask="url(#middle)" fill="black" cx="81" cy="81" rx="81" ry="89"/>
+</svg>

@@ -1,0 +1,23 @@
+<%- include("../partials/head") %>
+    <banner>
+        <dots></dots>
+        <div class="logo">
+            <img src="/static/logos/logo.png">
+            <span class="title">scuffbox
+                <span class="subtitle">games</span>
+            </span>
+        </div>
+    </banner>
+    <content>
+        <div class="container">
+            <label for="code">ROOM CODE</label>
+            <input type="text" id="code" placeholder="ENTER 4-LETTER CODE"  maxlength="4" autocomplete="off">
+            <label for="name">NAME<span class="remaining">12</span></label>
+            <input type="text" id="name" placeholder="ENTER YOUR NAME" maxlength="12" autocomplete="off">
+            <button id="play">PLAY</button>
+            <span class="tos">By clicking Play, you agree to our <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ">Terms of Service</a></span>
+        </div>
+    </content>
+    <%- include("../scripts/join") %>
+    <%- include("../styles/join") %>
+<%- include("../partials/feet") %>

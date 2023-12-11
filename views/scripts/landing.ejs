@@ -1,1 +1,35 @@
-<script nonce="<%= locals.nonce %>"></script>
+<script nonce="<%= locals.nonce %>">
+    var selectSound = new Audio("/static/audio/PICKER_Scroll.wav");
+    var options = document.querySelectorAll("menu options p");
+    var selections = {};
+
+    document.body.addEventListener("keydown", function(e){
+        if(e.key == "ArrowUp"){
+            for(var i = 0; i < options.length; i++){
+                if(options[i].getAttribute("selected") != "1") continue;
+                setSelected(--i < 0 ? options.length - 1 : i);
+                break;
+            }
+        }
+        if(e.key == "ArrowDown"){
+            for(var i = 0; i < options.length; i++){
+                if(options[i].getAttribute("selected") != "1") continue;
+                setSelected((i+1) % options.length);
+                break;
+            }
+        }
+    });
+
+    options.forEach(function(e, i){
+        e.addEventListener("mouseover", function(){
+            setSelected(i);
+        });
+    });
+
+    function setSelected(i){
+        selectSound.currentTime = 0;
+        selectSound.play();
+        options.forEach((e) => e.setAttribute("selected", "0"));
+        options[i].setAttribute("selected", "1");
+    }
+</script>

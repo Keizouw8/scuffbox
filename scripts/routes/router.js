@@ -6,6 +6,7 @@ import setNonce from "../middleware/setNonce.js";
 import csp from "../middleware/csp.js";
 
 import index from "./index.js";
+import join from "./join.js";
 
 const router = Router();
 
@@ -16,5 +17,6 @@ router.use(cors());
 // router.use(setNonce);
 
 router.get("/", index);
+router.get("/join", join);
 
 export default router;

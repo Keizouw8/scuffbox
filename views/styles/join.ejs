@@ -1,0 +1,165 @@
+<style nonce="<%= locals.nonce %>">
+    @font-face {
+        font-family: "title";
+        src: url("/static/fonts/supriasans/Heavy.otf") format("opentype")
+    }
+    @font-face {
+        font-family: "subtitle";
+        src: url("/static/fonts/supriasans/MediumItalic.otf") format("opentype")
+    }
+
+    body{
+        background: rgb(12, 20, 31);
+        color: #f5f7f7;
+        font-family: Helvetica, Arial, sans-serif;
+        font-weight: 700;
+    }
+
+    content{
+        position: absolute;
+        right: 0;
+        top: 0;
+        width: 45vw;
+        height: 100vh;
+    }
+
+    content div.container{
+        position: absolute;
+        display: inline-block;
+        left: 50%;
+        top: 50%;
+        width: 80%;
+        transform: translate(-50%, -50%);
+    }
+
+    content div.container input{
+        width: 100%;
+        height: 34px;
+        margin-bottom: 30px;
+        padding: 15px 15px 13px;
+        background-color: #1f2937;
+        border: 1px solid #353f4d;
+        border-radius: 12px;
+        font-size: 18px;
+        font-weight: 700;
+        text-transform: uppercase;
+        color: #f5f7f7;
+    }
+
+    content div.container input::placeholder{
+        color: #8d939b;
+    }
+
+    content div.container label{
+        display: inline-block;
+        margin-bottom: 10px;
+        padding: 0 12px;
+        font-size: 17px;
+        width: 100%;
+    }
+
+    content div.container label span.remaining{
+        float: right;
+    }
+
+    content div.container button{
+        position: relative;
+        cursor: pointer;
+        height: 64px;
+        width: calc(100% - 50px);
+        border: none;
+        border-radius: 12px;
+        font-size: 18px;
+        background-color: #1f2937;
+        color: #f5f7f7;
+        font-family: Helvetica, Arial, sans-serif;
+        font-weight: 700;
+        left: 50%;
+        margin-bottom: 12px;
+        transform: translateX(-50%);
+    }
+
+    content div.container span.tos{
+        position: relative;
+        display: inline-block;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 12px;
+        color: #8c939c;
+    }
+
+    content div.container span.tos a{
+        text-decoration: none;
+        color: rgb(64, 105, 230);
+    }
+
+    banner{
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 55vw;
+        height: 100vh;
+        background: rgb(64, 105, 230);
+        overflow: hidden;
+    }
+
+    banner dots{
+        position: absolute;
+        width: max(110vw, 200vh);
+        height: max(110vw, 200vh);
+        background: radial-gradient(
+            circle at 
+                15px
+                15px,
+                rgba(0, 0, 0, 0.1) 14px, 
+                #0000 15px
+        ) 
+        0 0 / 50px 50px;
+        animation: moveDots 60s infinite linear;
+    }
+
+    @keyframes moveDots{
+        from{
+            top: min(-55vw, -100vh);
+            left: min(-55vw, -100vh);
+        }
+        to{
+            top: 0;
+            left: 0;
+        }
+    }
+
+    banner div.logo{
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        width: 60%;
+        height: 42vw;
+        transform: translate(-50%, -50%);
+    }
+
+    banner div.logo img{
+        position: relative;
+        width: 100%;
+        top: 0;
+        left: 0
+    }
+
+    banner div.logo span.title{
+        position: relative;
+        display: inline-block;
+        top: 1vw;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 6vw;
+        font-family: "title";
+    }
+
+    banner div.logo span.title span.subtitle{
+        position: absolute;
+        top: 5vw;
+        right: 0;
+        font-size: 4vw;
+        font-family: "subtitle";
+    }
+</style>
