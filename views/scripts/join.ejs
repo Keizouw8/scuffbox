@@ -1,4 +1,8 @@
 <script nonce="<%= locals.nonce %>">
+    document.getElementById("play").addEventListener("click", function(){
+        window.location = `/game/${document.getElementById("code").value.toUpperCase()}?name=${document.getElementById("name").value.toUpperCase()}`;
+    });
+
     document.getElementById("name").addEventListener("input", function(){
         if(document.getElementById("name").value.length - 12 > 0) document.getElementById("name").value = document.getElementById("name").value.substr(0, 12);
         document.querySelector("span.remaining").innerText = 12 - document.getElementById("name").value.length;

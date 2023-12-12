@@ -1,0 +1,13 @@
+<script nonce="<%= locals.nonce %>">
+    const socket = io({
+        auth: {
+            type: 1,
+            user: "<%= locals.host %>",
+            room: "<%= locals.room %>"
+        }
+    });
+
+    socket.on("dc", () => window.location = "/");
+    socket.on("join", console.log);
+    socket.on("leave", console.log);
+</script>

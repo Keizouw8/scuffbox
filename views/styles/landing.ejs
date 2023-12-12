@@ -13,6 +13,37 @@
         background: rgb(230, 120, 170);
     }
 
+    span.esc{
+        position: absolute;
+        top: 1vw;
+        left: 1vw;
+        width: 3.5vw;
+        height: 3.5vw;
+        line-height: 3.5vw;
+        text-align: center;
+        font-size: 1.5vw;
+        border-radius: 0.1vw;
+        background: black;
+        color: white;
+        text-align: center;
+        font-family: "din";
+        box-shadow: 0 0 0.5vw 0 white;
+    }
+
+    div.loading{
+        position: absolute;
+        display: block;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        background-image: url(/static/textures/yellowedpaper.png);
+        background-size: cover;
+        background-position: center;
+        width: 40vw;
+        border-radius: 1vw;
+        aspect-ratio: 3 / 2;
+    }
+
     div.settings{
         position: absolute;
         display: block;
@@ -20,6 +51,7 @@
         top: 50%;
         transform: translate(-50%, -50%);
         height: 86vh;
+        border-radius: 0.5vw;
         aspect-ratio: 4 / 3;
         pointer-events: none;
         border: none;
@@ -60,10 +92,10 @@
 
     content{
         position: absolute;
-        top: 17vh;
-        right: 5vw;
-        height: 66vh;
-        width: 40vw;
+        top: 3vw;
+        right: 3vw;
+        height: calc(100vh - 6vw);
+        width: 42vw;
         background-image: url(/static/avatars/trump.jpg);
         background-position: center;
         background-size: cover;
@@ -111,14 +143,14 @@
     menu options p span {
         position: absolute;
         left: -1.5vw;
-        top: 50%;
+        top: 40%;
         transform: translate(-100%, -50%);
         background: black;
         border-radius: 0.1vw;
         color: white;
-        aspect-ratio: 1;
         box-shadow: 0 0 0.5vw 0 white;
         width: 3.5vw;
+        height: 3.5vw;
         line-height: 3.5vw;
         text-align: center;
         font-size: 2.75vw;

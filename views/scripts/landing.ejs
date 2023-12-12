@@ -1,6 +1,8 @@
 <script nonce="<%= locals.nonce %>">
+    var socket = io();
     var bgSound = new Audio("/static/audio/BackgroundAmbience.wav");
     var selectSound = new Audio("/static/audio/PICKER_Scroll.wav");
+    var chooseSound = new Audio("/static/audio/BSFXSelectGame.wav");
     
     var options = document.querySelectorAll("menu options p");
     var running = false;
@@ -8,28 +10,93 @@
         gfp: {
             hover(){},
             run(){
+                var cancelled = false;
 
+                var esc = document.createElement("span");
+                esc.innerText = esc.className = "esc";
+
+                var container = document.createElement("div");
+                container.className = "loading";
+
+                var centered = document.createElement("center");
+                centered.className = "centered";
+
+                var loading = document.createElement("img");
+                loading.src = "/static/animations/loading.gif";
+                loading.style.height = "4vw";
+                loading.style.marginBottom = "2vw";
+
+                var status = document.createElement("h1");
+                status.innerText = "CONNECTING TO SCUFFBOX SERVERS";
+                status.style.display = "block";
+                status.style.fontFamily = "din";
+                status.style.fontSize = "2.5vw";
+
+                setTimeout(function(){
+                    socket.emit("makeRoom", function(code){
+                        if(!cancelled) window.location = "/game/" + code;
+                    });
+                }, 2000)
+
+                centered.append(loading);
+                centered.append(status);
+                container.append(esc);
+                container.append(centered);
+                document.body.append(container);
+
+                document.body.addEventListener("keydown", function(e){
+                    if(e.key != "Escape") return;
+                    document.body.removeChild(container);
+                    document.querySelector("cover").setAttribute("active", "0");
+
+                    cancelled = true;
+                    running = false;
+
+                    document.body.addEventListener("keydown", handleKeys);
+                });
             }
         },
         settings: {
             hover(){},
             run(){
-                document.querySelector("cover").setAttribute("active", "1");
-
                 var container = document.createElement("div");
                 container.className = "settings";
+
+                var h1 = document.createElement("h1");
+                h1.innerText = "you think im dedicated enough to make settings?";
+                h1.style.fontFamily = "'Comic Sans', 'Comic Sans MS', 'Chalkboard SE', 'Comic Neue', sans-serif";
+                h1.style.fontSize = "8vh";
+                h1.style.color = "orange";
+                h1.className = "centered";
+
+                var esc = document.createElement("span");
+                esc.innerText = esc.className = "esc";
 
                 var iframe = document.createElement("iframe");
                 iframe.src = "https://www.youtube.com/embed/dQw4w9WgXcQ?controls=0&loop=1&autoplay=1";
                 iframe.className = "rick";
 
                 container.append(iframe);
+                container.append(esc);
+                container.append(h1);
                 document.body.append(container);
+
+                document.body.addEventListener("keydown", function(e){
+                    if(e.key != "Escape") return;
+                    document.body.removeChild(container);
+                    document.querySelector("cover").setAttribute("active", "0");
+                    running = false;
+
+                    document.body.addEventListener("keydown", handleKeys);
+                });
             }
         },
         howto: {
             hover(){},
-            run(){}
+            run(){
+                document.querySelector("cover").setAttribute("active", "0");
+                running = false;
+            }
         }
     };
 
@@ -46,7 +113,16 @@
             });
     }, 1000);
 
-    document.body.addEventListener("keydown", function(e){
+    document.body.addEventListener("keydown", handleKeys);
+
+    options.forEach(function(e, i){
+        e.addEventListener("mouseover", function(){
+            if(!running) setSelected(i);
+        });
+        e.addEventListener("click", runSelected);
+    });
+
+    function handleKeys(e){
         if(running) return;
         if(e.key == "ArrowUp"){
             for(var i = 0; i < options.length; i++){
@@ -63,16 +139,7 @@
             }
         }
         if(e.key == "Enter") runSelected();
-    });
-
-    document.querySelector("content").addEventListener("click", runSelected);
-
-    options.forEach(function(e, i){
-        e.addEventListener("mouseover", function(){
-            if(!running) setSelected(i);
-        });
-        e.addEventListener("click", runSelected);
-    });
+    }
 
     function setSelected(i){
         if(options[i].getAttribute("selected") == "1") return;
@@ -87,7 +154,10 @@
         if(running) return;
         for(var i = 0; i < options.length; i++){
             if(options[i].getAttribute("selected") != "1") continue;
-            running = true;
+            document.querySelector("cover").setAttribute("active", "1");
+            chooseSound.currentTime = 0;
+            chooseSound.play();
+            running = options[i].id;
             return selections[options[i].id].run();
         }
     }

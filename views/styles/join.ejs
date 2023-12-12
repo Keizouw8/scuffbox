@@ -105,23 +105,23 @@
 
     banner dots{
         position: absolute;
-        width: max(110vw, 200vh);
-        height: max(110vw, 200vh);
+        width: calc(100% + 5vw);
+        height: calc(100% + 5vw);
         background: radial-gradient(
             circle at 
-                15px
-                15px,
-                rgba(0, 0, 0, 0.1) 14px, 
-                #0000 15px
+                1.5vw
+                1.5vw,
+                rgba(0, 0, 0, 0.1) 1.5vw, 
+                #0000 1.5vw
         ) 
-        0 0 / 50px 50px;
-        animation: moveDots 60s infinite linear;
+        0 0 / 5vw 5vw;
+        animation: moveDots 3s infinite linear;
     }
 
     @keyframes moveDots{
         from{
-            top: min(-55vw, -100vh);
-            left: min(-55vw, -100vh);
+            top: -5vw;
+            left: -5vw;
         }
         to{
             top: 0;
