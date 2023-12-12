@@ -1,9 +1,53 @@
 <script nonce="<%= locals.nonce %>">
+    var bgSound = new Audio("/static/audio/BackgroundAmbience.wav");
     var selectSound = new Audio("/static/audio/PICKER_Scroll.wav");
+    
     var options = document.querySelectorAll("menu options p");
-    var selections = {};
+    var running = false;
+    var selections = {
+        gfp: {
+            hover(){},
+            run(){
+
+            }
+        },
+        settings: {
+            hover(){},
+            run(){
+                document.querySelector("cover").setAttribute("active", "1");
+
+                var container = document.createElement("div");
+                container.className = "settings";
+
+                var iframe = document.createElement("iframe");
+                iframe.src = "https://www.youtube.com/embed/dQw4w9WgXcQ?controls=0&loop=1&autoplay=1";
+                iframe.className = "rick";
+
+                container.append(iframe);
+                document.body.append(container);
+            }
+        },
+        howto: {
+            hover(){},
+            run(){}
+        }
+    };
+
+    bgSound.loop = true;
+
+    let playAttempt = setInterval(() => {
+        bgSound
+            .play()
+            .then(() => {
+                clearInterval(playAttempt);
+            })
+            .catch((error) => {
+                console.log("Unable to play the audio, User has not interacted yet.");
+            });
+    }, 1000);
 
     document.body.addEventListener("keydown", function(e){
+        if(running) return;
         if(e.key == "ArrowUp"){
             for(var i = 0; i < options.length; i++){
                 if(options[i].getAttribute("selected") != "1") continue;
@@ -18,18 +62,33 @@
                 break;
             }
         }
+        if(e.key == "Enter") runSelected();
     });
+
+    document.querySelector("content").addEventListener("click", runSelected);
 
     options.forEach(function(e, i){
         e.addEventListener("mouseover", function(){
-            setSelected(i);
+            if(!running) setSelected(i);
         });
+        e.addEventListener("click", runSelected);
     });
 
     function setSelected(i){
+        if(options[i].getAttribute("selected") == "1") return;
         selectSound.currentTime = 0;
         selectSound.play();
         options.forEach((e) => e.setAttribute("selected", "0"));
         options[i].setAttribute("selected", "1");
+        selections[options[i].id].hover();
+    }
+
+    function runSelected(){
+        if(running) return;
+        for(var i = 0; i < options.length; i++){
+            if(options[i].getAttribute("selected") != "1") continue;
+            running = true;
+            return selections[options[i].id].run();
+        }
     }
 </script>

@@ -1,11 +1,52 @@
 <style nonce="<%= locals.nonce %>">
     @font-face {
+        font-family: "icon";
+        font-weight: 400;
+        src: url("/static/fonts/icons/outlined.woff2") format('woff2');
+    }
+    @font-face {
         font-family: "din";
         src: url("/static/fonts/dincondensedbold.ttf");
     }
     
     body{
         background: rgb(230, 120, 170);
+    }
+
+    div.settings{
+        position: absolute;
+        display: block;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        height: 86vh;
+        aspect-ratio: 4 / 3;
+        pointer-events: none;
+        border: none;
+        overflow: hidden;
+    }
+
+    iframe.rick{
+        position: absolute;
+        display: block;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        height: 120vh;
+        aspect-ratio: 4 / 3;
+    }
+
+    cover{
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100vw;
+        height: 100vh;
+        pointer-events: none;
+    }
+
+    cover[active="1"]{
+        pointer-events: all;
     }
 
     accent{
@@ -23,7 +64,7 @@
         right: 5vw;
         height: 66vh;
         width: 40vw;
-        background-image: url(/static/avatars/1.jpg);
+        background-image: url(/static/avatars/trump.jpg);
         background-position: center;
         background-size: cover;
     }
@@ -54,10 +95,12 @@
         position: relative;
         display: block;
         font-family: "din";
-        font-size: 4.5vw;
+        font-size: 4vw;
+        line-height: 4vw;
         color: black;
         left: 0;
         transition: 0.1s;
+        margin-bottom: 0.5vw;
     }
 
     menu options p[selected="1"] {
@@ -65,25 +108,29 @@
         left: -3vw;
     }
 
-    menu options p span.material-symbols-outlined {
+    menu options p span {
         position: absolute;
         left: -1.5vw;
-        top: 38%;
+        top: 50%;
         transform: translate(-100%, -50%);
         background: black;
         border-radius: 0.1vw;
         color: white;
         aspect-ratio: 1;
         box-shadow: 0 0 0.5vw 0 white;
-        width: 4vw;
-        line-height: 4vw;
+        width: 3.5vw;
+        line-height: 3.5vw;
         text-align: center;
-        font-size: 3vw;
+        font-size: 2.75vw;
         font-weight: 900;
         opacity: 0;
+        font-family: "icon";
+        font-feature-settings: "liga";
+        -webkit-font-feature-settings: "liga";
+        -webkit-font-smoothing: antialiased;
     }
 
-    menu options p[selected="1"] span.material-symbols-outlined {
+    menu options p[selected="1"] span {
         opacity: 1;
     }
 </style>

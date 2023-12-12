@@ -3,24 +3,27 @@ var average1810sWage = 15; // https://www.nber.org/system/files/chapters/c2486/c
 var parties = ["Federalist", "Moderate", "Democratic-Republican"];
 var extremeties = ["Extreme ", "", "Moderate "];
 var occupations = ["Independent Farmer", "Farm Owner", "Investor", "Speculator"];
+var skinTones = ["#513021", "#874c2c", "#b66837", "#f9bf91", "#ecc19f"];
 
 export default class CPU{
-    constructor({ ideals, occupation, income } = {}){
+    constructor({ ideals, occupation, income, race } = {}){
         this.ideals = ideals || Math.random();
         this.occupation = occupation || Math.random();
         this.income = income || Math.random();
+		this.race = race || Math.random();
     }
  
     static average(...cpus){
         return new CPU({
             ideals: cpus.reduce((a, i) => a + i.ideals, 0) / cpus.length,
             occupation: cpus.reduce((a, i) => a + i.occupation, 0) / cpus.length,
-            income: cpus.reduce((a, i) => a + i.income, 0) / cpus.length
+            income: cpus.reduce((a, i) => a + i.income, 0) / cpus.length,
+			race: cpus.reduce((a, i) => a + i.race, 0) / cpus.length
         });
     }
 
 	distance(cpu){
-		return Math.sqrt(Math.pow(this.ideals - cpu.ideals, 2) + Math.pow(this.occupation - cpu.occupation, 2) + Math.pow(this.income - cpu.income, 2));
+		return Math.sqrt(3 * Math.pow(this.ideals - cpu.ideals, 2) + Math.pow(this.occupation - cpu.occupation, 2) + 10 * Math.pow(this.income - cpu.income, 2) + 5 * Math.pow(this.race - cpu.race, 2));
 	}
 
 	get(field, verbose = false){
@@ -48,6 +51,10 @@ export default class CPU{
 				var dollar = 50 + Math.pow(this.income - 0.6, 2) * 937.5;
 			}
 			return verbose ? `$${dollar.toFixed(2)}` : dollar;
+		}
+
+		if(field == "race"){
+			return verbose ? skinTones[Math.floor(this.race * skinTones.length)] : this.race;
 		}
 	}
 }
