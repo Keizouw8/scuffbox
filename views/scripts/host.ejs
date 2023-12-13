@@ -1,4 +1,8 @@
 <script nonce="<%= locals.nonce %>">
+    var round = 0;
+    var roundTimeout = false;
+    var startGameTimeout = false;
+
     const socket = io({
         auth: {
             type: 1,
@@ -6,12 +10,32 @@
             room: "<%= locals.room %>"
         }
     });
-
-    socket.on("dc", () => window.location = "/");
     
     socket.on("owner", function(owner){
         var person = document.getElementById(owner);
         if(person) person.querySelector("name").innerText += " (host)";
+    });
+
+    socket.on("start", function(){
+        document.getElementById("denominator").innerText = document.querySelectorAll("div.person").length;
+        setActive("canvas");
+        socket.emit("cutscene");
+        startGameTimeout = setTimeout(startRound, 10000);
+    });
+
+    socket.on("finished", function(n, d){
+        document.getElementById("numerator").innerText = n;
+        document.getElementById("denominator").innerText = d;
+        if(n / d == 1){
+            if(roundTimeout) clearTimeout(roundTimeout);
+            socket.emit("endRound", endRound);
+        }
+    });
+
+    socket.on("skip", function(){
+        if(document.getElementById("countdown").getAttribute("active") == "1") return;
+        if(startGameTimeout) clearTimeout(startGameTimeout);
+        startRound();
     });
 
     socket.on("join", function(user){
@@ -24,10 +48,6 @@
         name.innerText = user.name;
         person.append(name);
 
-        var ready = document.createElement("ready");
-        ready.innerText = ["not ready", "ready"][+user.properties.ready];
-        person.append(ready);
-
         document.querySelector("page#lobby div#people").append(person);
     });
 
@@ -36,7 +56,6 @@
         if(!person) return;
 
         person.style.background = ["#513021", "#874c2c", "#b66837", "#f9bf91", "#ecc19f"][+user.properties.skin];
-        person.querySelector("ready").innerText = ["not ready", "ready"][+user.properties.ready];
     });
 
     socket.on("leave", function(uid){
@@ -45,4 +64,35 @@
 
         userElem.remove();
     });
+
+    socket.on("dc", () => window.location = "/");
+
+    function startRound(){
+        socket.emit("startRound");
+        document.getElementById("round").innerText = ++round;
+        setActive("countdown");
+        roundTimeout = setTimeout(() => socket.emit("endRound", endRound), 62000);
+    }
+
+    function endRound(users){
+        socket.emit("cutscene");
+
+        var table = document.getElementById("table");
+        table.innerHTML = "";
+
+        for(var user of Object.keys(users).sort((a, b) => users[a].votes < users[b].votes)){
+            user = users[user];
+            var row = document.createElement("p");
+            row.innerText = `${user.name} | ${user.votes} votes | $${user.money}(+${user.made})`;
+            table.appendChild(row);
+        }
+
+        setActive("leaderboard");
+        document.getElementById("numerator").innerText = 0;
+    }
+
+    function setActive(id){
+        document.querySelectorAll("page").forEach((page) => page.setAttribute("active", "0"));
+        document.getElementById(id).setAttribute("active", "1");
+    }
 </script>

@@ -14,4 +14,14 @@
         left: 50%;
         transform: translate(-50%, -50%);
     }
+
+    *[active="0"]{
+        pointer-events: none;
+        opacity: 0;
+    }
+
+    *[active="1"]{
+        pointer-events: all;
+        opacity: 1;
+    }
 </style>

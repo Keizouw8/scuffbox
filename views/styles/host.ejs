@@ -13,4 +13,60 @@
         pointer-events: all;
         opacity: 1;
     }
+
+    timer{
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100vw;
+        height: 3vh;
+        background: gray;
+    }
+
+    timer bar{
+        position: absolute;
+        left: 0;
+        height: 100%;
+        background: black;
+        animation: none;
+        width: 100%;
+    }
+
+    page#countdown[active="1"] timer bar{
+        animation: timer 60s linear 2s 1 forwards;
+    }
+
+    roundbanner{
+        position: absolute;
+        background: white;
+        top: 0;
+        left: 0;
+        height: 100vh;
+        width: 100vw;
+        opacity: 1;
+    }
+
+    page#countdown[active="1"] roundbanner{
+        animation: fadeOut 1s 1s forwards;
+    }
+
+    @keyframes timer{
+        from{
+            width: 100%;
+        }
+
+        to{
+            width: 0;
+        }
+    }
+
+    @keyframes fadeOut{
+        from{
+            opacity: 1;
+        }
+
+        to{
+            opacity: 0;
+        }
+    }
 </style>

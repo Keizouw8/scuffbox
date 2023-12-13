@@ -22,6 +22,10 @@ export default class CPU{
         });
     }
 
+	match(candidate){
+		return Math.random();
+	}
+
 	distance(cpu){
 		return Math.sqrt(3 * Math.pow(this.ideals - cpu.ideals, 2) + Math.pow(this.occupation - cpu.occupation, 2) + 10 * Math.pow(this.income - cpu.income, 2) + 5 * Math.pow(this.race - cpu.race, 2));
 	}

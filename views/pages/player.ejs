@@ -9,7 +9,18 @@
                 <div style="cursor: pointer; height: 50px; width: 50px; display: inline-block; border-radius: 50%; background: <%= color %>;"></div>
             <% } %>
         </div>
-        <button id="ready">ready</button>
+        <button id="start" active="0">start</button>
+    </page>
+    <page id="waiting" active="0">
+        <div class="centered">
+            <h1>hold tight!</h1>
+            <button id="skip" active="0">skip</button>
+        </div>
+    </page>
+    <page id="dashboard" active="0">
+        <h1>dashboard</h1>
+        <h2>$<span id="money">0</span></h2>
+        <button id="finish">finish</button>
     </page>
     <%- include("../scripts/player") %>
     <%- include("../styles/player") %>

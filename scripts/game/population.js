@@ -19,6 +19,28 @@ export default class Population{
 		}
     }
 
+	vote(candidates){
+		var results = {};
+
+		for(var candidate of Object.keys(candidates)) results[candidate] = [0, 0];
+		for(var cpu of this.adults){
+			var best = ["", -1];
+			for(var candidate of Object.keys(candidates)){
+				var match = cpu.match(candidates[candidate]);
+				if(match < best[1]) continue;
+				if(match == best[1] && Math.random() > 0.5) continue;
+				best[0] = candidate;
+				best[1] = match;
+			}
+
+			var income = cpu.get("income");
+			results[best[0]][0]++;
+			results[best[0]][1] += income < 10 ? 0 : Math.max(3, (income - 10) * match * 0.1);
+		}
+
+		return results;
+	}
+
 	nextGeneration({ ideals = 0, occupation = 0, income = 0, race = 0 } = {}){
 		var people = [...this.adults];
 		var average = CPU.average(...this.adults);

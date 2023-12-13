@@ -1,6 +1,4 @@
 <script nonce="<%= locals.nonce %>">
-    var ready = false;
-
     const socket = io({
         auth: {
             type: 0,
@@ -9,24 +7,45 @@
         }
     });
 
-    document.querySelector("page#lobby button#ready").addEventListener("click", function(){
-        ready = Boolean(1 - ready);
-        document.querySelector("page#lobby button#ready").innerText = ["ready", "not ready"][+ready];
-        socket.emit("update", "ready", ready);
+    document.getElementById("start").addEventListener("click", function(){
+        socket.emit("start");
+    });
+
+    document.getElementById("skip").addEventListener("click", function(){
+        socket.emit("skip");
+    });
+
+    document.getElementById("finish").addEventListener("click", function(){
+        socket.emit("finish");
     });
 
     document.querySelectorAll("page#lobby div.colors div").forEach(function(e, i){
-        console.log(e)
         e.addEventListener("click", function(){
             socket.emit("update", "skin", i);
         });
     });
 
     socket.on("owner", function(){
-        var button = document.createElement("button");
-        button.innerText = "start game";
-        document.body.append(button);
+        document.getElementById("start").setAttribute("active", "1");
+        document.getElementById("skip").setAttribute("active", "1");
+    });
+
+    socket.on("money", function(money){
+        document.getElementById("money").innerText = money;
+    });
+
+    socket.on("startRound", function(){
+        setActive("dashboard");
+    });
+
+    socket.on("cutscene", function(){
+        setActive("waiting");
     });
 
     socket.on("dc", () => window.location = "/join");
+
+    function setActive(id){
+        document.querySelectorAll("page").forEach((page) => page.setAttribute("active", "0"));
+        document.getElementById(id).setAttribute("active", "1");
+    }
 </script>

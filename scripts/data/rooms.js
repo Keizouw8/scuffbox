@@ -15,10 +15,39 @@ export class Room{
 
     setHost(host){
         this.host = host;
-
         var that = this;
+
+        host.on("cutscene", () => Object.values(that.users).forEach(user => user.socket.emit("cutscene")));
+        host.on("startRound", () => Object.values(that.users).forEach(user => user.socket.emit("startRound")));
+
+        host.on("endRound", function(cb){
+            var results = that.population.vote(that.users);
+            for(var result of Object.keys(results)){
+                that.users[result].money += results[result][1];
+                that.users[result].socket.emit("money", that.users[result].money);
+                results[result] = {
+                    votes: results[result][0],
+                    made: results[result][1],
+                    name: that.users[result].name,
+                    money: that.users[result].money,
+                    properties: that.users[result].properties
+                };
+                that.users[result].finished = false;
+            }
+
+            that.population.nextGeneration({
+                ideals: -0.05 + Math.random() * 0.1,
+                income: -0.05 + Math.random() * 0.1,
+                occupation: -0.05 + Math.random() * 0.1,
+                race: -0.05 + Math.random() * 0.1
+            });
+
+            cb(results);
+        });
+
         host.on("disconnect", function(){
             Object.values(that.users).forEach(user => user.socket.emit("dc"));
+            delete rooms?.[this.id];
         });
     }
 
@@ -38,9 +67,9 @@ export class Room{
         this.host.emit("leave", id);
 
         if(this.owner != id) return;
-        this.owner = Object.keys(this.users)?.[0] || false;
+        this.owner = Object.keys(this.users)[0] || false;
         this.host.emit("owner", this.owner);
-        this.users?.[this.owner]?.emit("owner");
+        this.users?.[this.owner]?.socket?.emit("owner");
     }
 };
 
