@@ -1,6 +1,16 @@
 <%- include("../partials/head") %>
-    <h1>player</h1>
-    <h2><%= locals.name %></h2>
-    <p>Room: <%= locals.room %></p>
+    <page id="lobby" active="1">
+        <h1>player</h1>
+        <h2><%= locals.name %></h2>
+        <p>Room: <%= locals.room %></p>
+        <h3>skin:</h3>
+        <div class="colors">
+            <% for(var color of ["#513021", "#874c2c", "#b66837", "#f9bf91", "#ecc19f"]){ %>
+                <div style="cursor: pointer; height: 50px; width: 50px; display: inline-block; border-radius: 50%; background: <%= color %>;"></div>
+            <% } %>
+        </div>
+        <button id="ready">ready</button>
+    </page>
     <%- include("../scripts/player") %>
+    <%- include("../styles/player") %>
 <%- include("../partials/feet") %>

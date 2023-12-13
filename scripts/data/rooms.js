@@ -13,6 +13,15 @@ export class Room{
         this.population = new Population(1e4);
     }
 
+    setHost(host){
+        this.host = host;
+
+        var that = this;
+        host.on("disconnect", function(){
+            Object.values(that.users).forEach(user => user.socket.emit("dc"));
+        });
+    }
+
     join(user){
         this.users[user.id] = user;
         this.host.emit("join", user.object());
@@ -21,6 +30,7 @@ export class Room{
         if(this.owner) return;
         this.owner = user.id;
         this.host.emit("owner", user.id);
+        user.socket.emit("owner");
     }
 
     leave(id){
@@ -28,8 +38,9 @@ export class Room{
         this.host.emit("leave", id);
 
         if(this.owner != id) return;
-        this.owner = Object.keys(this.users)?.[0]?.id || false;
+        this.owner = Object.keys(this.users)?.[0] || false;
         this.host.emit("owner", this.owner);
+        this.users?.[this.owner]?.emit("owner");
     }
 };
 

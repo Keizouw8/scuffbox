@@ -1,14 +1,22 @@
 import { randomBytes } from "crypto";
 
 export default class User {
-    constructor(socket, name, roomid){
+    constructor(socket, name, room){
+        var that = this;
+        this.socket = socket;
+
         this.id = randomBytes(12).toString("hex");
-        this.room = roomid;
+        this.room = room;
         this.name = name;
-        this.ready = false;
         this.quality = 0.5;
-        this.skin = 1;
         this.money = 0;
+
+        this.properties = {
+            ready: false,
+            skin: 4,
+            colors: ["#D41D0F", "#010001"]
+        }
+
         this.legislation = {
             nativeLand: 0,
             tax: 0,
@@ -18,12 +26,16 @@ export default class User {
             }
         };
 
-        this.socket = socket;
+        socket.on("update", function(key, value){
+            that.properties[key] = value;
+            that.room.host.emit("update", that.object());
+        });
     }
 
     object(){
         return {
             ...this,
+            room: this.room.id,
             socket: undefined
         }
     }

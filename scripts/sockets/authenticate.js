@@ -10,8 +10,8 @@ export default function(socket){
     if(socket.handshake.auth.type == 1){
         if(room.host) return socket.emit("dc");
         if(room.hostCode != socket.handshake.auth.user) return socket.emit("dc");
-        return room.host = socket;
+        return room.setHost(socket);
     }
 
-    room.join(new User(socket, socket.handshake.auth.user, socket.handshake.auth.room));
+    room.join(new User(socket, socket.handshake.auth.user, room));
 }

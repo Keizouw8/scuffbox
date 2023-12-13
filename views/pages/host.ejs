@@ -1,5 +1,10 @@
 <%- include("../partials/head") %>
-    <h1>Host</h1>
-    <p>Room: <%= locals.room %></p>
+    <page id="lobby" active="1">
+        <h1>Host</h1>
+        <p>Room: <%= locals.room %></p>
+        <h2>People</h2>
+        <div id="people"></div>
+    </page>
     <%- include("../scripts/host") %>
+    <%- include("../styles/host") %>
 <%- include("../partials/feet") %>

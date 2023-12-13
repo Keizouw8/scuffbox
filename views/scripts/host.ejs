@@ -8,6 +8,41 @@
     });
 
     socket.on("dc", () => window.location = "/");
-    socket.on("join", console.log);
-    socket.on("leave", console.log);
+    
+    socket.on("owner", function(owner){
+        var person = document.getElementById(owner);
+        if(person) person.querySelector("name").innerText += " (host)";
+    });
+
+    socket.on("join", function(user){
+        var person = document.createElement("div");
+        person.className = "person";
+        person.id = user.id;
+        person.style.background = ["#513021", "#874c2c", "#b66837", "#f9bf91", "#ecc19f"][+user.properties.skin];
+
+        var name = document.createElement("name");
+        name.innerText = user.name;
+        person.append(name);
+
+        var ready = document.createElement("ready");
+        ready.innerText = ["not ready", "ready"][+user.properties.ready];
+        person.append(ready);
+
+        document.querySelector("page#lobby div#people").append(person);
+    });
+
+    socket.on("update", function(user){
+        var person = document.getElementById(user.id);
+        if(!person) return;
+
+        person.style.background = ["#513021", "#874c2c", "#b66837", "#f9bf91", "#ecc19f"][+user.properties.skin];
+        person.querySelector("ready").innerText = ["not ready", "ready"][+user.properties.ready];
+    });
+
+    socket.on("leave", function(uid){
+        var userElem = document.getElementById(uid);
+        if(!userElem) return;
+
+        userElem.remove();
+    });
 </script>
