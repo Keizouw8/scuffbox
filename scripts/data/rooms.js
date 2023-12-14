@@ -18,7 +18,20 @@ export class Room{
         var that = this;
 
         host.on("cutscene", () => Object.values(that.users).forEach(user => user.socket.emit("cutscene")));
-        host.on("startRound", () => Object.values(that.users).forEach(user => user.socket.emit("startRound")));
+        host.on("startRound", function(){
+            var users = Object.values(that.users).map((user) => ({
+                id: user.id,
+                name: user.name,
+                properties: user.properties
+            }));
+
+            Object.values(that.users).forEach(user => user.socket.emit("startRound", users));
+        });
+
+        host.on("message", function(message, to){
+            if(to) return to.forEach((user) => that.users[user]?.socket?.emit("message", message));
+            Object.values(that.users).forEach(user => user.socket.emit("message", message));
+        });
 
         host.on("endRound", function(cb){
             var results = that.population.vote(that.users);

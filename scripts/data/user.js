@@ -1,15 +1,13 @@
-import { randomBytes } from "crypto";
-
 export default class User {
     constructor(socket, name, room){
         var that = this;
         this.socket = socket;
 
-        this.id = randomBytes(12).toString("hex");
+        this.id = socket.id;
         this.room = room;
         this.name = name;
         this.quality = 0.5;
-        this.money = 0;
+        this.money = 1000;
         this.finished = false;
 
         this.properties = {
@@ -42,6 +40,10 @@ export default class User {
         socket.on("finish", function(){
             that.finished = true;
             that.room.host.emit("finished", Object.values(that.room.users).reduce((a, i) => a + i.finished, 0), Object.keys(that.room.users).length);
+        });
+
+        socket.on("debate", function(opponent){
+            if(Object.keys(that.room.users).includes(opponent)) that.room.host.emit("debate", that.id, opponent);
         });
     }
 

@@ -5,11 +5,14 @@
   "type": "module",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "lines": "cloc . --exclude-dir=node_modules --exclude-ext=json"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "devDependencies": {
+    "cloc": "^1.98.0-cloc"
+  },
   "dependencies": {
     "cors": "^2.8.5",
     "ejs": "^3.1.9",

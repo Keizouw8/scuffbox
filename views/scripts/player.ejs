@@ -34,12 +34,34 @@
         document.getElementById("money").innerText = money;
     });
 
-    socket.on("startRound", function(){
+    socket.on("startRound", function(users){
+        var container = document.getElementById("debatewith");
+        container.innerHTML = "";
+
+        for(var user of users){
+            if(user.id == socket.id) continue;
+            var button = document.createElement("button");
+            button.innerText = user.name;
+
+            function listener(){
+                button.removeEventListener("click", listener);
+                socket.emit("debate", user.id);
+            }
+
+            button.addEventListener("click", listener);
+            container.append(button);
+        }
+
         setActive("dashboard");
     });
 
     socket.on("cutscene", function(){
         setActive("waiting");
+    });
+    
+    socket.on("message", function(message){
+        document.getElementById("messageContent").innerText = message;
+        setActive("message");
     });
 
     socket.on("dc", () => window.location = "/join");

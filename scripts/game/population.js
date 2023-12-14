@@ -26,7 +26,7 @@ export default class Population{
 		for(var cpu of this.adults){
 			var best = ["", -1];
 			for(var candidate of Object.keys(candidates)){
-				var match = cpu.match(candidates[candidate]);
+				var match = cpu.match(candidates[candidate]) * candidates[candidate].quality;
 				if(match < best[1]) continue;
 				if(match == best[1] && Math.random() > 0.5) continue;
 				best[0] = candidate;
@@ -35,7 +35,7 @@ export default class Population{
 
 			var income = cpu.get("income");
 			results[best[0]][0]++;
-			results[best[0]][1] += income < 10 ? 0 : Math.max(3, (income - 10) * match * 0.1);
+			results[best[0]][1] += cpu.income < 0.6 ? 0 : (income - 50) * match * 0.2;
 		}
 
 		return results;

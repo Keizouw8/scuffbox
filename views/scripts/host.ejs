@@ -1,4 +1,6 @@
 <script nonce="<%= locals.nonce %>">
+    var users = {};
+    var votes = {};
     var round = 0;
     var roundTimeout = false;
     var startGameTimeout = false;
@@ -10,6 +12,17 @@
             room: "<%= locals.room %>"
         }
     });
+
+    socket.on("debate", async function(affirmative, negative){
+        socket.emit("message", "debate!");
+        socket.emit("message", "get ready...", [affirmative, negative]);
+        
+        document.getElementById("affirmative").innerText = users[affirmative]?.name;
+        document.getElementById("negative").innerText = users[negative]?.name;
+        
+        if(roundTimeout) roundTimeout.pause();
+        document.querySelector("debate").setAttribute("active", "1");
+    });
     
     socket.on("owner", function(owner){
         var person = document.getElementById(owner);
@@ -20,25 +33,24 @@
         document.getElementById("denominator").innerText = document.querySelectorAll("div.person").length;
         setActive("canvas");
         socket.emit("cutscene");
-        startGameTimeout = setTimeout(startRound, 10000);
+        startGameTimeout = new Timer(startRound, 10000);
     });
 
     socket.on("finished", function(n, d){
         document.getElementById("numerator").innerText = n;
         document.getElementById("denominator").innerText = d;
-        if(n / d == 1){
-            if(roundTimeout) clearTimeout(roundTimeout);
-            socket.emit("endRound", endRound);
-        }
+        if(n / d == 1) roundTimeout.now();
     });
 
     socket.on("skip", function(){
         if(document.getElementById("countdown").getAttribute("active") == "1") return;
-        if(startGameTimeout) clearTimeout(startGameTimeout);
+        if(startGameTimeout) startGameTimeout.cancel();
         startRound();
     });
 
     socket.on("join", function(user){
+        users[user.id] = user;
+
         var person = document.createElement("div");
         person.className = "person";
         person.id = user.id;
@@ -52,6 +64,7 @@
     });
 
     socket.on("update", function(user){
+        users[user.id] = user;
         var person = document.getElementById(user.id);
         if(!person) return;
 
@@ -59,6 +72,7 @@
     });
 
     socket.on("leave", function(uid){
+        delete users[uid];
         var userElem = document.getElementById(uid);
         if(!userElem) return;
 
@@ -68,31 +82,60 @@
     socket.on("dc", () => window.location = "/");
 
     function startRound(){
+        debates = {};
         socket.emit("startRound");
         document.getElementById("round").innerText = ++round;
         setActive("countdown");
-        roundTimeout = setTimeout(() => socket.emit("endRound", endRound), 62000);
+        roundTimeout = new Timer(endRound, 62000);
     }
 
-    function endRound(users){
+    function endRound(){
         socket.emit("cutscene");
+        socket.emit("endRound", function(users){
+            var table = document.getElementById("table");
+            table.innerHTML = "";
 
-        var table = document.getElementById("table");
-        table.innerHTML = "";
+            for(var user of Object.keys(users).sort((a, b) => users[a].votes < users[b].votes)){
+                user = users[user];
+                var row = document.createElement("p");
+                row.innerText = `${user.name} | ${user.votes} votes | $${user.money}(+${user.made})`;
+                table.appendChild(row);
+            }
 
-        for(var user of Object.keys(users).sort((a, b) => users[a].votes < users[b].votes)){
-            user = users[user];
-            var row = document.createElement("p");
-            row.innerText = `${user.name} | ${user.votes} votes | $${user.money}(+${user.made})`;
-            table.appendChild(row);
-        }
-
-        setActive("leaderboard");
-        document.getElementById("numerator").innerText = 0;
+            setActive("leaderboard");
+            document.getElementById("numerator").innerText = 0;
+        });
     }
 
     function setActive(id){
         document.querySelectorAll("page").forEach((page) => page.setAttribute("active", "0"));
         document.getElementById(id).setAttribute("active", "1");
+    }
+
+    class Timer{
+        constructor(cb, time){
+            this.cb = cb;
+            this.time = time;
+            this.resume();
+        }
+
+        pause(){
+            clearTimeout(this.timeOut);
+            this.time -= Date.now() - this.original;
+        }
+
+        resume(){
+            this.timeOut = setTimeout(this.cb, this.time);
+            this.original = Date.now();
+        }
+
+        now(){
+            this.cancel();
+            this.cb();
+        }
+
+        cancel(){
+            clearTimeout(this.timeOut);
+        }
     }
 </script>
