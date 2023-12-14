@@ -22,6 +22,32 @@
         
         if(roundTimeout) roundTimeout.pause();
         document.querySelector("debate").setAttribute("active", "1");
+
+        await new Promise(function(resolve, reject){
+            setTimeout(resolve, 2100);
+        });
+
+        await new Promise(function(resolve, reject){
+            socket.emit("callback", affirmative, "ready", resolve);
+        });
+        document.getElementById("affirmative").setAttribute("speaking", "1");
+
+        await new Promise(function(resolve, reject){
+            setTimeout(resolve, 30000);
+        });
+        document.getElementById("affirmative").setAttribute("speaking", "0");
+
+        await new Promise(function(resolve, reject){
+            socket.emit("callback", negative, "ready", resolve);
+        });
+        document.getElementById("negative").setAttribute("speaking", "1");
+
+        await new Promise(function(resolve, reject){
+            setTimeout(resolve, 30000);
+        });
+        document.getElementById("negative").setAttribute("speaking", "0");
+
+        socket.emit("message", "read", [affirmative, negative]);        
     });
     
     socket.on("owner", function(owner){

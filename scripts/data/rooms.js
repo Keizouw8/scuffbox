@@ -1,13 +1,14 @@
 import { randomBytes } from "crypto";
 import Population from "../game/population.js";
 
+var characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 var rooms = {};
 
 export class Room{
     constructor(){
         this.host = false;
         this.hostCode = randomBytes(10).toString("hex").toUpperCase();
-        this.id = randomBytes(2).toString("hex").toUpperCase();
+        this.id = new Array(4).fill(0).map(() => characters[Math.floor(Math.random() * characters.length)]).join("");
         this.users = {};
         this.owner = false;
         this.population = new Population(1e4);
