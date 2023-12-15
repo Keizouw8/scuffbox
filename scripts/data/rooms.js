@@ -34,6 +34,13 @@ export class Room{
             Object.values(that.users).forEach(user => user.socket.emit("message", message));
         });
 
+        host.on("callback", function(message, to){
+            if(!to) to = Object.keys(that.users);
+            to.forEach(function(user){
+                that.users[user].socket.emit("callback", message, (...args) => host.emit("callback", ...args, to.length > 1 ? user : undefined));
+            });
+        });
+
         host.on("endRound", function(cb){
             var results = that.population.vote(that.users);
             for(var result of Object.keys(results)){

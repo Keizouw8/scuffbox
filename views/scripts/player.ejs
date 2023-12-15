@@ -17,6 +17,7 @@
 
     document.getElementById("finish").addEventListener("click", function(){
         socket.emit("finish");
+        document.querySelector("cover").setAttribute("active", 1);
     });
 
     document.querySelectorAll("page#lobby div.colors div").forEach(function(e, i){
@@ -43,12 +44,14 @@
             var button = document.createElement("button");
             button.innerText = user.name;
 
-            function listener(){
-                button.removeEventListener("click", listener);
-                socket.emit("debate", user.id);
+            function listener(id){
+                return function(){
+                    button.removeEventListener("click", listener);
+                    socket.emit("debate", id);
+                }
             }
 
-            button.addEventListener("click", listener);
+            button.addEventListener("click", listener(user.id));
             container.append(button);
         }
 
@@ -62,6 +65,21 @@
     socket.on("message", function(message){
         document.getElementById("messageContent").innerText = message;
         setActive("message");
+    });
+
+    socket.on("callback", function(message, callback){
+        var container = document.getElementById("callback");
+        container.innerHTML = "";
+
+        if(message == "ready"){
+            var button = document.createElement("button");
+            button.innerText = "ready";
+            button.className = "centered";
+            button.addEventListener("click", callback);
+            container.append(button);
+        }
+
+        setActive("callback");
     });
 
     socket.on("dc", () => window.location = "/join");

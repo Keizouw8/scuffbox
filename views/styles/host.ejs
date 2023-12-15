@@ -51,15 +51,19 @@
         color: gray;
     }
 
-    debate span.speaker[active="1"]{
+    debate span.speaker.winner{
+        color: yellow;
+    }
+
+    debate h1 span.speaker[speaking="1"]{
         color: black;
     }
 
-    debate span.speaker[active="1"] ~ timer#debate bar{
-        animation: timer 30s linear 2s 1 forwards;
+    debate h1:has(span.speaker[speaking="1"]) ~ timer#debate bar{
+        animation: timer 30s linear 1 forwards;
     }
 
-    page#countdown[active="1"] debate[active="1"] ~ timer#main bar{
+    page#countdown:has(debate[active="1"]) timer#main bar{
         animation-play-state: paused;
     }
 

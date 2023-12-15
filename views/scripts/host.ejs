@@ -1,7 +1,9 @@
 <script nonce="<%= locals.nonce %>">
+    var skinColors = ["#513021", "#874c2c", "#b66837", "#f9bf91", "#ecc19f"];
+
+    var round = 0;
     var users = {};
     var votes = {};
-    var round = 0;
     var roundTimeout = false;
     var startGameTimeout = false;
 
@@ -28,9 +30,10 @@
         });
 
         await new Promise(function(resolve, reject){
-            socket.emit("callback", affirmative, "ready", resolve);
+           hostCallback("ready", resolve, [affirmative]);
         });
         document.getElementById("affirmative").setAttribute("speaking", "1");
+        socket.emit("message", "debate!", [affirmative]);
 
         await new Promise(function(resolve, reject){
             setTimeout(resolve, 30000);
@@ -38,16 +41,40 @@
         document.getElementById("affirmative").setAttribute("speaking", "0");
 
         await new Promise(function(resolve, reject){
-            socket.emit("callback", negative, "ready", resolve);
+            hostCallback("ready", resolve, [negative]);
         });
         document.getElementById("negative").setAttribute("speaking", "1");
+        socket.emit("message", "debate!", [negative]);
 
         await new Promise(function(resolve, reject){
             setTimeout(resolve, 30000);
         });
         document.getElementById("negative").setAttribute("speaking", "0");
 
-        socket.emit("message", "read", [affirmative, negative]);        
+        var votes = {};
+
+        hostCallback({
+            event: "vote",
+            affirmative: users[affirmative]?.name,
+            negative: users[negative]?.name
+        }, function(vote, uid){
+            votes[uid] = vote;
+        });
+
+        socket.emit("message", "wait in suspense", [affirmative, negative]);
+
+        await new Promise(function(resolve, reject){
+            setTimeout(resolve, 10000);
+        });
+
+        var affVotes = Object.values(votes).reduce((a, i) => a += i, 0);
+        var negVotes = Object.keys(votes).length - affVotes;
+        var winner = affVotes == negVotes ? Math.round(Math.random()) : affVotes > negVotes ? 0 : 1;
+        var debaters = [affirmative, negative];
+        document.getElementById(!winner ? "affirmative" : "negative").classList.add("winner");
+        socket.emit("winner", debaters[winner], debaters[winner - 1]);
+
+        socket.emit("cutscene");
     });
     
     socket.on("owner", function(owner){
@@ -69,6 +96,12 @@
     });
 
     socket.on("skip", function(){
+        if(document.querySelector("debate").getAttribute("active") == "1"){
+            document.querySelectorAll("span.speaker").forEach((e) => e.className = "speaker");
+            document.querySelector("debate").setAttribute("active", "0");
+            roundTimeout.resume();
+            return socket.emit("startRound");
+        }
         if(document.getElementById("countdown").getAttribute("active") == "1") return;
         if(startGameTimeout) startGameTimeout.cancel();
         startRound();
@@ -80,7 +113,7 @@
         var person = document.createElement("div");
         person.className = "person";
         person.id = user.id;
-        person.style.background = ["#513021", "#874c2c", "#b66837", "#f9bf91", "#ecc19f"][+user.properties.skin];
+        person.style.background = skinColors[+user.properties.skin];
 
         var name = document.createElement("name");
         name.innerText = user.name;
@@ -94,7 +127,7 @@
         var person = document.getElementById(user.id);
         if(!person) return;
 
-        person.style.background = ["#513021", "#874c2c", "#b66837", "#f9bf91", "#ecc19f"][+user.properties.skin];
+        person.style.background = skinColors[+user.properties.skin];
     });
 
     socket.on("leave", function(uid){
@@ -121,7 +154,7 @@
             var table = document.getElementById("table");
             table.innerHTML = "";
 
-            for(var user of Object.keys(users).sort((a, b) => users[a].votes < users[b].votes)){
+            for(var user of Object.keys(users).sort((a, b) => users[a].votes > users[b].votes)){
                 user = users[user];
                 var row = document.createElement("p");
                 row.innerText = `${user.name} | ${user.votes} votes | $${user.money}(+${user.made})`;
@@ -136,6 +169,11 @@
     function setActive(id){
         document.querySelectorAll("page").forEach((page) => page.setAttribute("active", "0"));
         document.getElementById(id).setAttribute("active", "1");
+    }
+
+    function hostCallback(message, callback, to){
+        socket.emit("callback", message, to);
+        socket.on("callback", callback);
     }
 
     class Timer{
