@@ -6,9 +6,10 @@ var rooms = {};
 
 export class Room{
     constructor(){
+        this.id = new Array(4).fill(0).map(() => characters[Math.floor(Math.random() * characters.length)]).join("");
         this.host = false;
         this.hostCode = randomBytes(10).toString("hex").toUpperCase();
-        this.id = new Array(4).fill(0).map(() => characters[Math.floor(Math.random() * characters.length)]).join("");
+        this.ingame = false;
         this.users = {};
         this.owner = false;
         this.population = new Population(1e4);
@@ -18,15 +19,34 @@ export class Room{
         this.host = host;
         var that = this;
 
+        host.on("ingame", () => that.ingame = true);
+
         host.on("cutscene", () => Object.values(that.users).forEach(user => user.socket.emit("cutscene")));
-        host.on("startRound", function(){
+
+        host.on("winner", function(winner, loser){
+            var winnerPopularity = that.users[winner]?.quality;
+            var loserPopularity = that.users[loser]?.quality;
+
+            if(winnerPopularity == undefined || loserPopularity == undefined) return;
+
+            var differential = Math.abs(winnerPopularity - loserPopularity) / 3;
+            if(!differential) differential = 0.1;
+            
+            that.users[winner].quality = Math.min(1, that.users[winner].quality + differential);
+            that.users[loser].quality = Math.max(0, that.users[loser].quality - differential);
+
+            that.users[winner].socket.emit("popularity", that.users[winner].quality);
+            that.users[loser].socket.emit("popularity", that.users[loser].quality);
+        });
+
+        host.on("startRound", function(dontClear){
             var users = Object.values(that.users).map((user) => ({
                 id: user.id,
                 name: user.name,
                 properties: user.properties
             }));
 
-            Object.values(that.users).forEach(user => user.socket.emit("startRound", users));
+            Object.values(that.users).forEach(user => user.socket.emit("startRound", users, dontClear));
         });
 
         host.on("message", function(message, to){
@@ -37,7 +57,7 @@ export class Room{
         host.on("callback", function(message, to){
             if(!to) to = Object.keys(that.users);
             to.forEach(function(user){
-                that.users[user].socket.emit("callback", message, (...args) => host.emit("callback", ...args, to.length > 1 ? user : undefined));
+                that.users[user].socket.emit("callback", message);
             });
         });
 
@@ -46,6 +66,7 @@ export class Room{
             for(var result of Object.keys(results)){
                 that.users[result].money += results[result][1];
                 that.users[result].socket.emit("money", that.users[result].money);
+
                 results[result] = {
                     votes: results[result][0],
                     made: results[result][1],

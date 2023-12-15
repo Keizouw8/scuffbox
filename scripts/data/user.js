@@ -6,7 +6,7 @@ export default class User {
         this.id = socket.id;
         this.room = room;
         this.name = name;
-        this.quality = 0.5;
+        this.quality = 1;
         this.money = 1000;
         this.finished = false;
 
@@ -25,6 +25,13 @@ export default class User {
         };
 
         socket.on("update", function(key, value){
+            if(key == "skin"){
+                that.quality = value / 4;
+                that.money = value * 250;
+
+                socket.emit("money", that.money);
+                socket.emit("popularity", that.quality);
+            }
             that.properties[key] = value;
             that.room.host.emit("update", that.object());
         });
@@ -43,8 +50,13 @@ export default class User {
         });
 
         socket.on("debate", function(opponent){
+            if(that.money < 300) return;
+            that.money -= 300;
+            socket.emit("money", that.money);
             if(Object.keys(that.room.users).includes(opponent)) that.room.host.emit("debate", that.id, opponent);
         });
+
+        socket.on("callback", (...args) => that.room.host.emit("callback", ...args, socket.id));
     }
 
     object(){

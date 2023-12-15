@@ -35,7 +35,11 @@
         document.getElementById("money").innerText = money;
     });
 
-    socket.on("startRound", function(users){
+    socket.on("popularity", function(popularity){
+        document.getElementById("popularity").innerText = popularity;
+    });
+
+    socket.on("startRound", function(users, dontClear){
         var container = document.getElementById("debatewith");
         container.innerHTML = "";
 
@@ -55,6 +59,10 @@
             container.append(button);
         }
 
+        if(!dontClear){
+            document.querySelector("cover").setAttribute("active", 0);
+        }
+
         setActive("dashboard");
     });
 
@@ -67,7 +75,7 @@
         setActive("message");
     });
 
-    socket.on("callback", function(message, callback){
+    socket.on("callback", function(message){
         var container = document.getElementById("callback");
         container.innerHTML = "";
 
@@ -75,8 +83,25 @@
             var button = document.createElement("button");
             button.innerText = "ready";
             button.className = "centered";
-            button.addEventListener("click", callback);
+            button.addEventListener("click", () => socket.emit("callback"));
             container.append(button);
+        }
+
+        if(message?.event == "vote"){
+            var div = document.createElement("div");
+            div.className = "centered";
+
+            var affirmative = document.createElement("button");
+            affirmative.innerText = message.affirmative;
+            affirmative.addEventListener("click", () => socket.emit("callback", 1));
+
+            var negative = document.createElement("button");
+            negative.innerText = message.negative;
+            negative.addEventListener("click", () => socket.emit("callback", 0));
+
+            div.append(affirmative);
+            div.append(negative);
+            container.append(div);
         }
 
         setActive("callback");

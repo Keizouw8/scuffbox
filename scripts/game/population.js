@@ -35,7 +35,7 @@ export default class Population{
 
 			var income = cpu.get("income");
 			results[best[0]][0]++;
-			results[best[0]][1] += cpu.income < 0.6 ? 0 : (income - 50) * match * 0.2;
+			results[best[0]][1] += cpu.income < 0.6 ? 0 : (income - 50) * match * 0.1;
 		}
 
 		return results;

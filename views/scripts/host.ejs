@@ -3,7 +3,6 @@
 
     var round = 0;
     var users = {};
-    var votes = {};
     var roundTimeout = false;
     var startGameTimeout = false;
 
@@ -72,7 +71,7 @@
         var winner = affVotes == negVotes ? Math.round(Math.random()) : affVotes > negVotes ? 0 : 1;
         var debaters = [affirmative, negative];
         document.getElementById(!winner ? "affirmative" : "negative").classList.add("winner");
-        socket.emit("winner", debaters[winner], debaters[winner - 1]);
+        socket.emit("winner", debaters[winner], debaters[1 - winner]);
 
         socket.emit("cutscene");
     });
@@ -85,6 +84,7 @@
     socket.on("start", function(){
         document.getElementById("denominator").innerText = document.querySelectorAll("div.person").length;
         setActive("canvas");
+        socket.emit("ingame");
         socket.emit("cutscene");
         startGameTimeout = new Timer(startRound, 10000);
     });
@@ -100,7 +100,7 @@
             document.querySelectorAll("span.speaker").forEach((e) => e.className = "speaker");
             document.querySelector("debate").setAttribute("active", "0");
             roundTimeout.resume();
-            return socket.emit("startRound");
+            return socket.emit("startRound", true);
         }
         if(document.getElementById("countdown").getAttribute("active") == "1") return;
         if(startGameTimeout) startGameTimeout.cancel();
@@ -151,10 +151,14 @@
     function endRound(){
         socket.emit("cutscene");
         socket.emit("endRound", function(users){
+            var userKeys = Object.keys(users);
+            userKeys.sort((a, b) => users[a].votes > users[b].votes);
+            
             var table = document.getElementById("table");
             table.innerHTML = "";
 
-            for(var user of Object.keys(users).sort((a, b) => users[a].votes > users[b].votes)){
+
+            for(var user of userKeys){
                 user = users[user];
                 var row = document.createElement("p");
                 row.innerText = `${user.name} | ${user.votes} votes | $${user.money}(+${user.made})`;
