@@ -14,7 +14,7 @@ export default class Population{
 				ideals: i < n * federalistSplit ? Math.random() * 0.4 : 0.6 + Math.random() * 0.4,
 				occupation: Math.random(),
 				income: i < n * richSplit ? 0.8 + Math.random() * 0.2 : Math.random() * 0.5,
-				race: i > 1 - n * blackSplit ? Math.random() * 0.2 : 0.2 + Math.random() * 0.8
+				race: i > n * (1 - blackSplit) ? Math.random() * 0.25 : 0.5 + Math.random() * 0.5
 			}));
 		}
     }
@@ -24,6 +24,7 @@ export default class Population{
 
 		for(var candidate of Object.keys(candidates)) results[candidate] = [0, 0];
 		for(var cpu of this.adults){
+			if(cpu.race <= 0.25) continue;
 			var best = ["", -1];
 			for(var candidate of Object.keys(candidates)){
 				var match = cpu.match(candidates[candidate]) * candidates[candidate].quality;
