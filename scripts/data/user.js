@@ -50,8 +50,8 @@ export default class User {
         });
 
         socket.on("debate", function(opponent){
-            if(that.money < 300) return;
-            that.money -= 300;
+            if(that.money < 500) return;
+            that.money -= 500;
             socket.emit("money", that.money);
             if(Object.keys(that.room.users).includes(opponent)) that.room.host.emit("debate", that.id, opponent);
         });

@@ -1,7 +1,7 @@
 <script nonce="<%= locals.nonce %>">
     var skinColors = ["#513021", "#874c2c", "#b66837", "#f9bf91", "#ecc19f"];
 
-    var round = 0;
+    var year = 1814;
     var users = {};
     var roundTimeout = false;
     var startGameTimeout = false;
@@ -143,16 +143,21 @@
     function startRound(){
         debates = {};
         socket.emit("startRound");
-        document.getElementById("round").innerText = ++round;
+        document.getElementById("year").innerText = ++year;
         setActive("countdown");
         roundTimeout = new Timer(endRound, 62000);
     }
 
     function endRound(){
-        socket.emit("cutscene");
+        if(year == 1824){
+            socket.emit("message", "Good Job!");
+        }else{
+            socket.emit("cutscene");
+        }
+
         socket.emit("endRound", function(users){
             var userKeys = Object.keys(users);
-            userKeys.sort((a, b) => users[a].votes > users[b].votes);
+            userKeys.sort((a, b) => users[a].votes < users[b].votes);
             
             var table = document.getElementById("table");
             table.innerHTML = "";
