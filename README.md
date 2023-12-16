@@ -42,11 +42,8 @@ Jackbox style party game
 * Each CPU gives N% to their most matched candidate where N is determined by the match score. CPUs only give if upper middle class or above.
 
 ## Notes
-[^1]:
-Buntin, Lawrence J. and U.S. Bureau Of The Census. “Historical Statistics of the United States: Colonial Times to 1970.” _Journal of Marketing Research_ 13, no. 4 (November 1976): 447.[ https://doi.org/10.2307/3151041](https://doi.org/10.2307/3151041).
+[^1]: Buntin, Lawrence J. and U.S. Bureau Of The Census. “Historical Statistics of the United States: Colonial Times to 1970.” _Journal of Marketing Research_ 13, no. 4 (November 1976): 447.[ https://doi.org/10.2307/3151041](https://doi.org/10.2307/3151041).
 
-[^2]:
-“A New Nation Votes.” Accessed December 15, 2023.[ https://elections.lib.tufts.edu/?f%5Belection_type_sim%5D%5B%5D=General&f%5Boffice_id_ssim%5D%5B%5D=ON056&q=1812&range%5Bdate_sim%5D%5Bbegin%5D=1820&range%5Bdate_sim%5D%5Bend%5D=1820&search_field=all_fields](https://elections.lib.tufts.edu/?f%5Belection_type_sim%5D%5B%5D=General&f%5Boffice_id_ssim%5D%5B%5D=ON056&q=1812&range%5Bdate_sim%5D%5Bbegin%5D=1820&range%5Bdate_sim%5D%5Bend%5D=1820&search_field=all_fields).
+[^2]: “A New Nation Votes.” Accessed December 15, 2023.[ https://elections.lib.tufts.edu/?f%5Belection_type_sim%5D%5B%5D=General&f%5Boffice_id_ssim%5D%5B%5D=ON056&q=1812&range%5Bdate_sim%5D%5Bbegin%5D=1820&range%5Bdate_sim%5D%5Bend%5D=1820&search_field=all_fields](https://elections.lib.tufts.edu/?f%5Belection_type_sim%5D%5B%5D=General&f%5Boffice_id_ssim%5D%5B%5D=ON056&q=1812&range%5Bdate_sim%5D%5Bbegin%5D=1820&range%5Bdate_sim%5D%5Bend%5D=1820&search_field=all_fields).
 
-[^3]:
-Lebergott, Stanley. “Wage Trends, 1800-1900.” In _Trends in the American Economy in the Nineteenth Century_, 449–500. Princeton University Press, 1960.[ http://www.nber.org/chapters/c2486](http://www.nber.org/chapters/c2486).
+[^3]: Lebergott, Stanley. “Wage Trends, 1800-1900.” In _Trends in the American Economy in the Nineteenth Century_, 449–500. Princeton University Press, 1960.[ http://www.nber.org/chapters/c2486](http://www.nber.org/chapters/c2486).
