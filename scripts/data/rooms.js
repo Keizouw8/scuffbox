@@ -61,14 +61,49 @@ export class Room{
             });
         });
 
-        host.on("endRound", function(cb){
+        host.on("endRound", function(final, cb){
+            if(final){
+                that.users.andrew = {
+                    id: "aj",
+                    name: "Andrew Jackson",
+                    stances: {
+                        racialEquality: 0,
+                        genderEquality: 0,
+                        selfSufficiency: 1
+                    },
+                    legislation: {
+                        nativeLand: 36000 / 1656000,
+                        tax: 1
+                    },
+                    socket: {emit(){}},
+                    quality: 1,
+                    money: 420
+                };
+                that.users.jqa = {
+                    id: "jqa",
+                    name: "John Quincy Adams",
+                    stances: {
+                        racialEquality: 0.5,
+                        genderEquality: 0,
+                        selfSufficiency: 0
+                    },
+                    legislation: {
+                        nativeLand: -36000 / 1656000,
+                        tax: 1.5
+                    },
+                    socket: { emit(){} },
+                    quality: 0.5,
+                    money: 69
+                };
+            }
+
             var results = that.population.vote(that.users);
             for(var result of Object.keys(results)){
                 that.users[result].money += results[result][1];
                 that.users[result].socket.emit("money", that.users[result].money);
 
                 results[result] = {
-                    votes: results[result][0],
+                    votes: Math.round(results[result][0]),
                     made: results[result][1],
                     name: that.users[result].name,
                     money: that.users[result].money,
@@ -77,13 +112,15 @@ export class Room{
                 that.users[result].finished = false;
             }
 
-            that.population.nextGeneration({
-                ideals: -0.05 + Math.random() * 0.1,
-                income: -0.05 + Math.random() * 0.1,
-                occupation: -0.05 + Math.random() * 0.1,
-                race: -0.05 + Math.random() * 0.1
-            });
+            if(final){
+                var userKeys = Object.keys(results);
+                userKeys.sort((a, b) => Math.pow(-1, results[a].votes > results[b].votes));
+                for(var i = 0; i < userKeys.length; i++){
+                    that.users[userKeys[i]].socket.emit("gameEnd", i + 1);
+                }
+            }
 
+            that.population.nextGeneration();
             cb(results);
         });
 

@@ -1,5 +1,3 @@
-var average1810sWage = 15; // https://www.nber.org/system/files/chapters/c2486/c2486.pdf
-
 var parties = ["Federalist", "Moderate", "Democratic-Republican"];
 var extremeties = ["Extreme ", "", "Moderate "];
 var occupations = ["Independent Farmer", "Farm Owner", "Investor", "Speculator"];
@@ -14,16 +12,39 @@ export default class CPU{
     }
  
     static average(...cpus){
+		var totalWeight = 0;
+		var totalStats = {
+			ideals: 0,
+			occupation: 0,
+			income: 0,
+			race: 0
+		};
+
+		for(var i = 0; i < cpus.length; i++){
+			if(!Array.isArray(cpus[i])) cpus[i] = [cpus[i], 1];
+			totalWeight += cpus[i][1];
+			totalStats.ideals += cpus[i][0].ideals * cpus[i][1];
+			totalStats.occupation += cpus[i][0].occupation * cpus[i][1];
+			totalStats.income += cpus[i][0].income * cpus[i][1];
+			totalStats.race += cpus[i][0].race * cpus[i][1];
+		}
+
         return new CPU({
-            ideals: cpus.reduce((a, i) => a + i.ideals, 0) / cpus.length,
-            occupation: cpus.reduce((a, i) => a + i.occupation, 0) / cpus.length,
-            income: cpus.reduce((a, i) => a + i.income, 0) / cpus.length,
-			race: cpus.reduce((a, i) => a + i.race, 0) / cpus.length
+            ideals: totalStats.ideals / totalWeight,
+            occupation: totalStats.occupation / totalWeight,
+            income: totalStats.income / totalWeight,
+			race: totalStats.race / totalWeight
         });
     }
 
 	match(candidate){
-		return Math.random();
+		var raceMatch = this.race < 0.25 ? candidate.stances.racialEquality : 1 - candidate.stances.racialEquality;
+		var genderMatch = 1 - candidate.stances.genderEquality;
+		var sufficiencyMatch = Math.abs(1 - candidate.stances.selfSufficiency);
+		var nativeMatch = (1 - candidate.legislation.nativeLand / 1656000) * Math.min(0.75, this.occupation) * Math.min(0.75, this.ideals) * 0.25;
+		var taxMatch = Math.min(1, Math.max(0, Math.max(0.5, this.occupation) + (this.income > 0.8 ? candidate.legislation.tax - 1 : 1 - candidate.legislation.tax)));
+	
+		return (raceMatch + genderMatch + sufficiencyMatch + nativeMatch + taxMatch) / 4.25;
 	}
 
 	distance(cpu){

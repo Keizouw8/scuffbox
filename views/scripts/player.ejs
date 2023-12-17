@@ -7,6 +7,22 @@
         }
     });
 
+    var moves = [["racialEquality", "stance"], ["genderEquality", "stance"], ["selfSufficiency", "stance"], ["tax", "legislation", 100, false], ["nativeLand", "legislation", 1656000, true, -Infinity]];
+
+    moves.forEach(function([name, type, normalizer = 100, upperLimit = true, lowerLimit = 0]){
+        function emitter(){
+            socket.emit(type, name, Math.max(lowerLimit, Math.min(upperLimit ? normalizer : Infinity, +document.getElementById(name).value)))  / normalizer;
+        }
+
+        document.getElementById(name).addEventListener("change", emitter);
+        document.getElementById(name).addEventListener("click", emitter);
+        document.getElementById(name).addEventListener("input", emitter);
+    });
+
+    document.getElementById("backToHub").addEventListener("click", function(){
+        window.location = "/join";
+    });
+
     document.getElementById("start").addEventListener("click", function(){
         socket.emit("start");
     });
@@ -29,6 +45,10 @@
     socket.on("owner", function(){
         document.getElementById("start").setAttribute("active", "1");
         document.getElementById("skip").setAttribute("active", "1");
+        document.getElementById("backToHub").addEventListener("click", function(){
+            socket.emit("closeRoom");
+            window.location = "/join";
+        });
     });
 
     socket.on("money", function(money){
@@ -37,6 +57,11 @@
 
     socket.on("popularity", function(popularity){
         document.getElementById("popularity").innerText = popularity;
+    });
+
+    socket.on("gameEnd", function(placing){
+        document.getElementById("placing").innerText = placing;
+        setActive("gameEnd");
     });
 
     socket.on("startRound", function(users, dontClear){
@@ -110,6 +135,7 @@
     socket.on("dc", () => window.location = "/join");
 
     function setActive(id){
+        document.querySelector("cover").setAttribute("active", "0");
         document.querySelectorAll("page").forEach((page) => page.setAttribute("active", "0"));
         document.getElementById(id).setAttribute("active", "1");
     }

@@ -149,15 +149,11 @@
     }
 
     function endRound(){
-        if(year == 1824){
-            socket.emit("message", "Good Job!");
-        }else{
-            socket.emit("cutscene");
-        }
+        if(year != 1824) socket.emit("cutscene");
 
-        socket.emit("endRound", function(users){
+        socket.emit("endRound", year == 1824, function(users){
             var userKeys = Object.keys(users);
-            userKeys.sort((a, b) => users[a].votes < users[b].votes);
+            userKeys.sort((a, b) => Math.pow(-1, users[a].votes > users[b].votes));
             
             var table = document.getElementById("table");
             table.innerHTML = "";
