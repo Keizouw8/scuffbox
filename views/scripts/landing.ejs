@@ -36,7 +36,7 @@
                     socket.emit("makeRoom", function(code){
                         if(!cancelled) window.location = "/game/" + code;
                     });
-                }, 0)
+                }, 2000);
 
                 centered.append(loading);
                 centered.append(status);
