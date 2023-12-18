@@ -1,4 +1,4 @@
-<script nonce="<%= locals.nonce %>">
+<script>
     const socket = io({
         auth: {
             type: 0,
@@ -11,8 +11,12 @@
 
     moves.forEach(function([name, type, normalizer = 100, upperLimit = true, lowerLimit = 0]){
         function emitter(){
-            socket.emit(type, name, Math.max(lowerLimit, Math.min(upperLimit ? normalizer : Infinity, +document.getElementById(name).value)))  / normalizer;
+            socket.emit(type, name, Math.max(lowerLimit, Math.min(upperLimit ? normalizer : Infinity, +document.getElementById(name).value)) / normalizer, type == "stance" ? undefined : function(value){
+                document.getElementById(name).value = parseInt(normalizer * value);
+            });
         }
+
+        if(type == "legislation") return document.getElementById(name+"Set").addEventListener("click", emitter);
 
         document.getElementById(name).addEventListener("change", emitter);
         document.getElementById(name).addEventListener("click", emitter);
@@ -52,11 +56,11 @@
     });
 
     socket.on("money", function(money){
-        document.getElementById("money").innerText = money;
+        document.getElementById("money").innerText = money.toFixed(2);
     });
 
     socket.on("popularity", function(popularity){
-        document.getElementById("popularity").innerText = popularity;
+        document.getElementById("popularity").innerText = parseInt(popularity * 100);
     });
 
     socket.on("gameEnd", function(placing){

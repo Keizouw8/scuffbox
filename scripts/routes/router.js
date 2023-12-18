@@ -13,5 +13,6 @@ router.use(cors());
 router.get("/", index);
 router.get("/join", join);
 router.get("/game/:id", game);
+router.get("/character", (req, res) => res.render("pages/character"));
 
 export default router;

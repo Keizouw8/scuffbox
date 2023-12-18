@@ -29,6 +29,7 @@ export default class User {
         };
 
         socket.on("start", function(){
+            if(that.room.users.length < 2) return;
             that.room.host.emit("start");
         });
 
@@ -69,11 +70,12 @@ export default class User {
             that.room.host.emit("debate", that.id, opponent);
         });
 
-        socket.on("legislation", function(key, value){
-            if(that.money < 1000) return;
+        socket.on("legislation", function(key, value, callback){
+            if(that.money < 1000) return callback(that.legislation[key]);
             that.money -= 1000;
             socket.emit("money", that.money);
             that.legislation[key] = value;
+            callback(that.legislation[key]);
             that.room.host.emit("legislation", socket.id, key, value);
         });
 

@@ -12,40 +12,51 @@
         <button id="start" active="0">start</button>
     </page>
     <page id="dashboard" active="0">
-        <p>Money: $<span id="money">1000</span></p>
-        <p>Popularity <span id="popularity">0.5</span></p>
-        <hr>
-        <h2>Stances:</h2>
-        <label for="racialEquality">Racial Equality</label>
-        <input type="range" min="0" max="100" value="0" id="racialEquality">
-        <label for="genderEquality">Gender Equality</label>
-        <input type="range" min="0" max="100" value="0" id="genderEquality">
-        <label for="selfSufficiency">Middle Class Self Sufficiency</label>
-        <input type="range" min="0" max="100" value="50" id="selfSufficiency">
-        <hr>
-        <h2>Suggest Legislation</h2>
-        <label for="tax">Taxes</label>
-        <input id="tax" type="number" value="100" min="0" />
-        <label for="nativeLand">Take N Square Miles of Native Land</label>
-        <input id="nativeLand" type="number" value="0" min="0" max="1656000" />
-        <hr>
-        <h2>Debate with:</h2>
-        <div id="debatewith"></div>
-        <button id="finish">finish</button>
-        <cover active="0"><h1 class="centered">finished</h1></cover>
+        <content>
+            <h1>DASHBOARD</h1>
+            <br>
+            <h3>MONEY: $<span id="money">1000</span></h3>
+            <h3>POPULARITY: <span id="popularity">50</span>%</h3>
+            <hr>
+            <h2>STANCES:</h2>
+            <label for="racialEquality">RACIAL EQUALITY</label>
+            <input type="range" min="0" max="100" value="0" id="racialEquality">
+            <label for="genderEquality">GENDER EQUALITY</label>
+            <input type="range" min="0" max="100" value="0" id="genderEquality">
+            <label for="selfSufficiency">MIDDLE CLASS SELF SUFFICIENCY</label>
+            <input type="range" min="0" max="100" value="50" id="selfSufficiency">
+            <hr>
+            <h2>SUGGEST LEGISLATION</h2>
+            <label for="tax">INCREASE TAXES BY N%</label>
+            <input id="tax" type="number" value="100" min="0" />
+            <button class="set" id="taxSet">SET</button>
+            <br>
+            <label for="nativeLand">TAKE N SQUARE MILES OF NATIVE LAND</label>
+            <input id="nativeLand" type="number" value="0" min="0" max="1656000" />
+            <button class="set" id="nativeLandSet">SET</button>
+            <br>
+            <div id="debateContainer">
+                <hr>
+                <h2>DEBATE WITH:</h2>
+                <div id="debatewith"></div>
+            </div>
+            <hr>
+            <button id="finish">FINISH</button>
+        </content>
+        <cover active="0"><h1 class="centered">FINISHED</h1></cover>
     </page>
     <page id="waiting" active="0">
-        <div class="centered">
-            <h1>hold tight!</h1>
-            <button id="skip" active="0">skip</button>
-        </div>
+        <center class="centered">
+            <h1>WAITING</h1>
+            <button id="skip" active="0">CONTINUE</button>
+        </center>
     </page>
     <page id="message" active="0"><h1 class="centered" id="messageContent"></h1></page>
     <page id="callback" active="0"></page>
     <page id="gameEnd" active="0">
         <center class="centered">
-            <h1>Good job! You were #<span id="placing">69</span> place.</h1>
-            <button id="backToHub">Back To Hub</button>
+            <h1>YOU GOT #<span id="placing">69</span> PLACE!</h1>
+            <button id="backToHub">BACK TO HUB</button>
         </center>
     </page>
     <%- include("../scripts/player") %>

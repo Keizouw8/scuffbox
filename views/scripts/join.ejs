@@ -1,4 +1,4 @@
-<script nonce="<%= locals.nonce %>">
+<script>
     document.getElementById("play").addEventListener("click", function(){
         window.location = `/game/${document.getElementById("code").value.toUpperCase()}?name=${document.getElementById("name").value.toUpperCase()}`;
     });

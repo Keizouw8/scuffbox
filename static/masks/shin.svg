@@ -1,0 +1,8 @@
+<svg width="24" height="60" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <ellipse ry="12" rx="12" cy="12" cx="12" fill="black"/>
+  <ellipse ry="10" rx="10" cy="50" cx="12" fill="black"/>
+  <path d="m 0, 12
+            l 2, 38
+            l 20, 0
+            l 2, -38" fill="black"/>
+</svg>
