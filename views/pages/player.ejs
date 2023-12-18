@@ -1,15 +1,32 @@
 <%- include("../partials/head") %>
     <page id="lobby" active="1">
-        <h1>player</h1>
-        <h2><%= locals.name %></h2>
-        <p>Room: <%= locals.room %></p>
-        <h3>skin:</h3>
-        <div class="colors">
-            <% for(var color of ["#513021", "#874c2c", "#b66837", "#f9bf91", "#ecc19f"]){ %>
+        <h1>GOOD FEELING POLITICS</h1>
+        <h2>USER: <%= locals.name %></h2>
+        <br>
+        <h3>DIFFICULTY SETTING:</h3>
+        <div class="skin">
+            <% for(var color of ["#513021", "#874c2c", "#b66837", "#f9bf91", "#ebd7c8"]){ %>
                 <div style="cursor: pointer; height: 50px; width: 50px; display: inline-block; border-radius: 50%; background: <%= color %>;"></div>
             <% } %>
         </div>
-        <button id="start" active="0">start</button>
+        <br>
+        <h3>PRIMARY: <input type="color" id="primary" value="#D41D0F"></h3>
+        <br>
+        <h3>SECONDARY: <input type="color" id="secondary" value="#010001"></h3>
+        <br>
+        <h3>FACE:</h3>
+        <button id="picture">TAKE PICTURE</button>
+        <div id="video" active="0">
+            <video></video>
+            <div class="leftPanel"></div>
+            <div class="rightPanel"></div>
+            <cov></cov>
+            <button id="take">TAKE</button>
+        </div>
+        <br>
+        <br>
+        <button id="start" active="0">START</button>
+        <%- include("../partials/character") %>
     </page>
     <page id="dashboard" active="0">
         <content>
@@ -35,7 +52,7 @@
             <input id="nativeLand" type="number" value="0" min="0" max="1656000" />
             <button class="set" id="nativeLandSet">SET</button>
             <br>
-            <div id="debateContainer">
+            <div id="debateContainer" active="0">
                 <hr>
                 <h2>DEBATE WITH:</h2>
                 <div id="debatewith"></div>
@@ -59,6 +76,8 @@
             <button id="backToHub">BACK TO HUB</button>
         </center>
     </page>
+    <%- include("../scripts/character") %>
+    <%- include("../styles/character") %>
     <%- include("../scripts/player") %>
     <%- include("../styles/player") %>
 <%- include("../partials/feet") %>

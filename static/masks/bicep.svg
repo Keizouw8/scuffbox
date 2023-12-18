@@ -1,0 +1,5 @@
+<svg width="24" height="84" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <ellipse ry="18" rx="12" cy="18" cx="12" fill="black"/>
+  <ellipse ry="12" rx="12" cy="72" cx="12" fill="black"/>
+  <rect height="54" width="24" y="18" x="0" fill="black"/>
+</svg>

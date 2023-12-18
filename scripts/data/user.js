@@ -11,10 +11,12 @@ export default class User {
         this.quality = 0.5;
         this.money = 1000;
         this.finished = false;
+        this.face = false;
 
         this.properties = {
             skin: 4,
-            colors: ["#D41D0F", "#010001"]
+            primary: "#D41D0F",
+            secondary: "#010001"
         };
 
         this.stances = {
@@ -79,6 +81,12 @@ export default class User {
             that.room.host.emit("legislation", socket.id, key, value);
         });
 
+        socket.on("face", async function(face, callback){
+            var buffer = Buffer.from(face.replace(/^data:image\/\w+;base64,/, ""), "base64");
+            that.face = buffer;
+            callback(true);
+        });
+
         socket.on("stance", function(key, value){
             that.stances[key] = Math.min(1, Math.max(0, value));
         });
@@ -88,7 +96,8 @@ export default class User {
         return {
             ...this,
             room: this.room.id,
-            socket: undefined
+            socket: undefined,
+            face: undefined
         }
     }
 }

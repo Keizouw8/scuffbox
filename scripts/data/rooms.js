@@ -23,6 +23,8 @@ export class Room{
 
         host.on("cutscene", () => Object.values(that.users).forEach(user => user.socket.emit("cutscene")));
 
+        host.on("canDebate", () => Object.values(that.users).forEach(user => user.socket.emit("canDebate")));
+
         host.on("winner", function(winner, loser){
             var winnerPopularity = that.users[winner]?.quality;
             var loserPopularity = that.users[loser]?.quality;

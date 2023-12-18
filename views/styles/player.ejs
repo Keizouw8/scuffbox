@@ -9,6 +9,66 @@
         font-family: "din";
     }
 
+    div#video{
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        height: 70vh;
+        aspect-ratio: 16 / 9;
+        z-index: 2;
+    }
+
+    cov{
+        position: absolute;
+        top: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        aspect-ratio: 162 / 201;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        -webkit-mask-image: url(/static/masks/inverted.svg);
+        -webkit-mask-position: center;
+        -webkit-mask-size: contain;
+        -webkit-mask-repeat: no-repeat;
+        -webkit-mask-mode: luminance;
+        mask-image: url(/static/masks/inverted.svg);
+        mask-position: center;
+        mask-size: contain;
+        mask-repeat: no-repeat;
+        mask-mode: luminance;
+    }
+
+    div#video div{
+        position: absolute;
+        top: 0;
+        height: 100%;
+        width: calc(35vh * 16 / 9 - 35vh * 162 / 201);
+        background: rgba(0, 0, 0, 0.5);
+    }
+
+    div#video div.leftPanel{
+        left: 0;
+    }
+
+    div#video div.rightPanel{
+        right: 0;
+    }
+
+    video{
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+    }
+
+    div#video button{
+        position: absolute;
+        right: 2vh;
+        bottom: 2vh;
+    }
+
     h1{
         font-size: 60px;
     }
@@ -26,6 +86,29 @@
         border-radius: 2px;
         margin: 20px;
         margin-left: 0px;
+    }
+
+    input[type="color"]{
+        border: none;
+        height: 40px;
+    }
+
+    ::-webkit-color-swatch{
+        border: black solid 2px;
+        border-radius: 5px;
+    }
+
+    ::-moz-color-swatch,
+    ::-moz-focus-inner{
+        border: black solid 2px;
+        border-radius: 5px;
+    }
+
+    character{
+        position: absolute;
+        top: 0vh;
+        right: 10vh;
+        height: 100vh;
     }
 
     button{

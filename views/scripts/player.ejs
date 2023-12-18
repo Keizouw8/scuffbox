@@ -40,10 +40,57 @@
         document.querySelector("cover").setAttribute("active", 1);
     });
 
-    document.querySelectorAll("page#lobby div.colors div").forEach(function(e, i){
+    document.querySelectorAll("page#lobby div.skin div").forEach(function(e, i){
         e.addEventListener("click", function(){
             socket.emit("update", "skin", i);
+            document.querySelector("character").style.setProperty("--skin", e.style.background);
         });
+    });
+
+    document.querySelectorAll("input[type='color']").forEach(function(e){
+        e.addEventListener("change", function(){
+            socket.emit("update", e.id, e.value);
+            document.querySelector("character").style.setProperty("--" + e.id, e.value);
+        });
+    });
+
+    document.getElementById("picture").addEventListener("click", function(){
+        var video = document.querySelector("video");
+        var Stream = false;
+        document.getElementById("video").setAttribute("active", "1");
+
+        navigator.mediaDevices
+            .getUserMedia({ video: {
+                width: 640, height: 360
+            }, audio: false })
+            .then((stream) => {
+                Stream = stream;
+                video.srcObject = stream;
+                video.play();
+            })
+            .catch((err) => {
+                console.error(`An error occurred: ${err}`);
+            });
+
+            document.getElementById("take").addEventListener("click", function(){
+                var canvas = document.createElement("canvas");
+                var context = canvas.getContext("2d");
+                
+                canvas.width = 640;
+                canvas.height = 360;
+                context.drawImage(video, 0, 0, 640, 360);
+                
+                socket.emit("face", canvas.toDataURL(), function(res){
+                    if(!res) return alert("didnt work loser");
+                    
+                    if(Stream) Stream.getTracks().forEach(function(track) {
+                        track.stop();
+                    });
+                    
+                    document.querySelector("character").style.setProperty("--face", `url(/pfp/<%= locals.room %>/${socket.id})`);
+                    document.getElementById("video").setAttribute("active", "0");
+                });
+            });
     });
 
     socket.on("owner", function(){
@@ -67,6 +114,10 @@
         document.getElementById("placing").innerText = placing;
         setActive("gameEnd");
     });
+
+    socket.on("canDebate", function(){
+        document.getElementById("debateContainer").setAttribute("active", "1");
+    })
 
     socket.on("startRound", function(users, dontClear){
         var container = document.getElementById("debatewith");

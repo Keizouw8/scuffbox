@@ -6,7 +6,12 @@
         <div id="people"></div>
     </page>
     <page id="canvas" active="0">
-        <h1 class="centered">insert tutorial animation here</h1>
+        <wall>
+            <img src="/static/textures/poster.png">
+        </wall>
+        <floor></floor>
+        <img src="/static/textures/tardis.png" class="tardis">
+        <%- include("../partials/character", { id: "powell" }) %>
     </page>
     <page id="countdown" active="0">
         <h1><span id="numerator">0</span>/<span id="denominator">0</span> players</h1>
@@ -21,10 +26,11 @@
         </debate>
     </page>
     <page id="leaderboard" active="0">
-        <h1>leaderboard</h1>
-        <div id="table">
+        <h1>leaderboard</h1><div id="table">
         </div>
     </page>
+    <%- include("../scripts/character") %>
+    <%- include("../styles/character") %>
     <%- include("../scripts/host") %>
     <%- include("../styles/host") %>
 <%- include("../partials/feet") %>

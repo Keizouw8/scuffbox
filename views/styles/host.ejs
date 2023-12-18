@@ -1,4 +1,46 @@
 <style>
+    character#powell{
+        height: 80vh;
+        position: absolute;
+        right: 10vw;
+        bottom: 10vh;
+        --face: url("/static/avatars/powell.png");
+        --primary: rgb(30, 30, 30);
+    }
+
+    page wall{
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 70vh;
+        width: 100vw;
+        background-color: rgb(210, 210, 200);
+    }
+
+    page wall img{
+        position: absolute;
+        top: 10vh;
+        height: 30vh;
+        right: 20vw;
+    }
+
+    page img.tardis{
+        position: absolute;
+        height: 90vh;
+        bottom: 10vh;
+        left: 10vw;
+    }
+
+    page floor{
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        height: 30vh;
+        width: 100vw;
+        background-image: url(/static/textures/carpet.jpeg);
+        background-size: cover;
+    }
+
     page{
         position: absolute;
         top: 0;

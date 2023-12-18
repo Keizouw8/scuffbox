@@ -1,5 +1,10 @@
 <script>
-    var skinColors = ["#513021", "#874c2c", "#b66837", "#f9bf91", "#ecc19f"];
+    var audioClips = {
+        intro: new Audio("/static/audio/Intro.m4a"),
+        leaderboard: new Audio("/static/audio/Leaderboard1.m4a"),
+        year3: new Audio("/static/audio/Year3Intro.m4a"),
+    };
+    var skinColors = ["#513021", "#874c2c", "#b66837", "#f9bf91", "#ebd7c8"];
 
     var year = 1814;
     var users = {};
@@ -83,16 +88,22 @@
 
     socket.on("start", function(){
         document.getElementById("denominator").innerText = document.querySelectorAll("div.person").length;
+        audioClips.intro.play();
         setActive("canvas");
         socket.emit("ingame");
         socket.emit("cutscene");
-        startGameTimeout = new Timer(startRound, 10000);
+        startGameTimeout = new Timer(startRound, 58000);
     });
 
     socket.on("finished", function(n, d){
         document.getElementById("numerator").innerText = n;
         document.getElementById("denominator").innerText = d;
-        if(n / d == 1) roundTimeout.now();
+        if(n / d == 1){
+            if(year == 1815){
+                audioClips.leaderboard.play();
+            }
+            roundTimeout.now();
+        }
     });
 
     socket.on("skip", function(){
@@ -102,8 +113,24 @@
             roundTimeout.resume();
             return socket.emit("startRound", true);
         }
+        if(document.getElementById("leaderboard").getAttribute("active") == "1"){
+            if(year == 1816){
+                socket.emit("canDebate");
+                audioClips.year3.play();
+                setActive("canvas");
+                socket.emit("cutscene");
+                return startGameTimeout = new Timer(startRound, 24000);
+            }
+            if(year == 1815) audioClips.leaderboard.pause();
+        }
         if(document.getElementById("countdown").getAttribute("active") == "1") return;
-        if(startGameTimeout) startGameTimeout.cancel();
+        if(year == 1814) audioClips.intro.pause();
+        if(year == 1816) audioClips.year3.pause();
+        if(startGameTimeout){
+            document.getElementById("canvas").innerHTML = "";
+            startGameTimeout.cancel();
+            startGameTimeout = false;
+        }
         startRound();
     });
 

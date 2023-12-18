@@ -4,6 +4,7 @@ import cors from "cors";
 import index from "./index.js";
 import join from "./join.js";
 import game from "./game.js";
+import pfp from "./pfp.js";
 
 const router = Router();
 
@@ -13,6 +14,6 @@ router.use(cors());
 router.get("/", index);
 router.get("/join", join);
 router.get("/game/:id", game);
-router.get("/character", (req, res) => res.render("pages/character"));
+router.get("/pfp/:room/:user", pfp);
 
 export default router;

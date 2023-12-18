@@ -1,12 +1,12 @@
 <style>
     character{
         aspect-ratio: 1 / 2;
-        background: gray;
         display: block;
         position: relative;
         --primary: #D41D0F;
         --secondary: #010001;
-        --skin: rgb(240, 189, 182);
+        --skin: #ebd7c8;
+        --face: url(/static/avatars/mii.png);
     }
 
     character origin{
@@ -38,7 +38,12 @@
         aspect-ratio: 36 / 116;
         top: 10%;
         transform-origin: 50% calc(100% * 18 / 122);
-        transform: translateY(calc(-100% * -18 / 110)) rotateZ(-1deg);
+    }
+
+    character origin waist thigh background{
+        height: 100%;
+        width: 100%;
+        position: absolute;
         background: var(--secondary);
         -webkit-mask-image: url(/static/masks/thigh.svg);
         -webkit-mask-position: center;
@@ -48,14 +53,31 @@
         mask-size: cover;
     }
 
+    character origin waist thigh shin{
+        position: absolute; 
+        width: 66.67%;
+        aspect-ratio: 24 / 60;
+        bottom: calc(100% * 12 / 116);
+        left: 50%;
+        transform-origin: 50% calc(100% * 12 / 60);
+        transform: translate(-50%, calc(100% * 48 / 60)) rotateZ(0deg);
+        background: var(--secondary);
+        -webkit-mask-image: url(/static/masks/shin.svg);
+        -webkit-mask-position: center;
+        -webkit-mask-size: cover;
+        mask-image: url(/static/masks/shin.svg);
+        mask-position: center;
+        mask-size: cover;
+    }
+
     character origin waist thigh.left{
         left: 2%;
-        transform: translateY(calc(-100% * -18 / 110)) rotateZ(-1deg);
+        transform: translateY(calc(100% * 18 / 122)) rotateZ(-1deg);
     }
 
     character origin waist thigh.right{
         right: 2%;
-        transform: translateY(calc(-100% * -18 / 110)) rotateZ(1deg);
+        transform: translateY(calc(100% * 18 / 122)) rotateZ(1deg);
     }
 
     character origin torso{
@@ -82,9 +104,11 @@
         mask-image: url(/static/masks/body.svg);
         mask-position: bottom;
         mask-size: cover;
+        z-index: 1;
     }
 
     character origin torso face{
+        z-index: 2;
         position: absolute;
         aspect-ratio: 162 / 201;
         width: 195%;
@@ -92,7 +116,7 @@
         left: 50%;
         transform-origin: 50% 100%;
         transform: translate(-50%, -100%) rotateZ(0deg);
-        background-image: url(/static/avatars/powell.png);
+        background-image: var(--face);
         background-position: center;
         background-size: cover;
         -webkit-mask-image: url(/static/masks/face.svg);
@@ -101,5 +125,61 @@
         mask-image: url(/static/masks/face.svg);
         mask-position: center;
         mask-size: 100% 100%;
+    }
+
+    character origin torso bicep{
+        position: absolute; 
+        width: 30%;
+        aspect-ratio: 24 / 84;
+        top: 20%;
+        transform-origin: 50% 0%;
+    }
+
+    character origin torso bicep.left{
+        left: 13%;
+        transform: rotateZ(31deg);
+    }
+
+    character origin torso bicep.right{
+        right: 13%;
+        transform: rotateZ(-31deg);
+    }
+
+    character origin torso bicep background{
+        height: 100%;
+        width: 100%;
+        position: absolute;
+        background: var(--primary);
+        -webkit-mask-image: url(/static/masks/bicep.svg);
+        -webkit-mask-position: center;
+        -webkit-mask-size: cover;
+        mask-image: url(/static/masks/bicep.svg);
+        mask-position: center;
+        mask-size: cover;
+        z-index: 0;
+    }
+
+    character origin torso bicep fore{
+        height: 70%;
+        width: 100%;
+        position: absolute;
+        background: var(--skin);
+        top: calc(100% * 72 / 84);
+        left: 50%;
+        transform-origin: 50% 0%;
+        transform: translateX(-50%) rotateZ(0deg);
+        z-index: 1;
+    }
+
+    character origin torso bicep fore hand{
+        aspect-ratio: 1;
+        position: absolute;
+        background: var(--skin);
+        top: calc(100% * 72 / 84);
+        left: 50%;
+        top: 100%;
+        width: 135%;
+        transform: translate(-50%, -50%);
+        border-radius: 50%;
     }
 </style>
